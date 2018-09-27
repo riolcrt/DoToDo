@@ -1,0 +1,13 @@
+:host {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    color: white;
+    font-family: 'Inconsolata', monospace;
+    font-weight: 100;
+}
+
+app-text-editor {
+    flex:1;
+}
+
