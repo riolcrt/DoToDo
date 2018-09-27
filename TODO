@@ -4,16 +4,38 @@ Main Roadmap:
   ✔ Generar proyecto de angular con ng cli @started(18-09-27 19:23) @done(18-09-27 19:30) @lasted(7m19s)
   ✔ Arreglar vulnerabilidades @started(18-09-27 19:37) @done(18-09-27 19:38) @lasted(1m13s)
   ✔ Generar la estructura general de la aplicación. @started(18-09-27 19:30) @done(18-09-27 20:36) @lasted(1h6m35s)
-  ☐ Definir funcionamiento de la aplicación @started(18-09-27 20:36)
+  ✔ Definir funcionamiento de la aplicación @started(18-09-27 20:36) @done(18-09-27 20:57) @lasted(21m37s)
     ☐ Voy a tener que bindear para prevenir que el tabulador se salga del textarea
     ☐ Voy a tener que bindear todos los atajos de teclado
-    ☐ El textarea en realidad debe de ser invisible y que los componentes se vayan creando dinamicamente segun se escribe
+    ✔ El textarea en realidad debe de ser invisible y que los componentes se vayan creando dinamicamente segun se escribe @started(18-09-27 20:58) @done(18-09-27 20:58) @lasted(21s)
       En realidad no será invisible el textarea si no que el texto será del mismo color que el fondo y los componentes se crearán encima de este, pero el ratón no les afectará.
       Cuando comienzas a escribir, el texto siempre es una anotación, es decir, será gris, no tendrá estado pero se le podran poner etiquetas con @today 
       Si detecta una arroba se crea un @hohoh 
     
 
-  ☐ Definir modelo TODOS
+  Definir modelo TODOS: 
+    Definir TodosStateModel:
+      Indentation: Number
+      Groups: Group[]
+      Todos: Todo[]
+      - Model: Editor Text
+      - UpdateText
+      - AddGroup
+      GroupStateModel:
+        Name: String
+        Indentatio: Number
+        Groups:[]
+        Todos: Todo[]
+        Finished: Number
+        Pending: Number
+        - AddTodo
+        - RemoveTodo
+        - UpdateTodo
+        TodoStateModel:
+          - Add
+          
+      
+
     Se pueden definir notas. Las notas son el texto plano sin ningún tipo de puntuacion.
     Se pueden definir Grupos, los grupos se crean cada vez que escribimos : que contienen un listado de Todos.
     Cada Todo Se Representará con [], el estado del todo se sacará de los corchetes. [] -> idle, [s:date] -> started, [d: date ] -> done,  [c: date] -> cancel

@@ -1,7 +1,15 @@
-import { State } from '@ngxs/store';
+import { State, Action, StateContext } from '@ngxs/store';
+import { TodosStateModel } from './TodosModel';
+import { UpdateText } from './TodosActions';
 ​
-@State<string[]>({
+@State<TodosStateModel>({
     name: 'todos',
-    defaults: []
 })
-export class TodosState {}
+export class TodosState {
+    @Action(UpdateText)
+    onUpdateText( ctx: StateContext<TodosStateModel>, payload: UpdateText) {
+        ctx.patchState({
+            editorText: payload.text
+        });
+    }
+}
