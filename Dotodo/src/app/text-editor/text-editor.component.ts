@@ -26,7 +26,7 @@ export class TextEditorComponent implements OnInit {
     this.dispatchUpdate(target.value);
   }
 
-  onKeydown(e: KeyboardEvent ) {
+  onShortcut(e: KeyboardEvent ) {
     if (e.altKey || e.code === 'Tab') {
       switch (e.key) {
         case 'Tab':
