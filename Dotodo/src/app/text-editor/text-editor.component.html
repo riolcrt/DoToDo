@@ -1,5 +1,5 @@
 <div id="wrapper">
-    <form>
+    <form (keydown)="onKeydown($event)">
         <textarea autofocus (input)=onTextInput($event)>
 Soy una anotacion normal y corriente
 Soy un grupo:

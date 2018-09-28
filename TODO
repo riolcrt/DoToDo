@@ -30,18 +30,17 @@ Main Roadmap:
   ✔ Generar la estructura general de la aplicación. @started(18-09-27 19:30) @done(18-09-27 20:36) @lasted(1h6m35s)
   ✔ Definir funcionamiento de la aplicación @started(18-09-27 20:36) @done(18-09-27 20:57) @lasted(21m37s)
     
-    Voy a tener que bindear todos los atajos de teclado:
-      ☐ [Tab] Incrementar Indentation.
-      ☐ [Shift + Tab ] Reducir Indentation.
-      ☐ [Alt + d] Terminar ToDo.
-      ☐ [Alt + s] Comenzar ToDo.
-      ☐ [Alt + c] Cancelar ToDo.
+  Voy a tener que bindear todos los atajos de teclado:
+    ✔ [Tab] Incrementar Indentation. @done(18-09-28 18:23)
+    ✔ [Shift + Tab ] Reducir Indentation. @done(18-09-28 18:23)
+    ✔ [Alt + d] Terminar ToDo. @done(18-09-28 18:23)
+    ✔ [Alt + s] Comenzar ToDo. @done(18-09-28 18:23)
+    ✔ [Alt + c] Cancelar ToDo. @done(18-09-28 18:23)
 
-
-    ✔ El textarea en realidad debe de ser invisible y que los componentes se vayan creando dinamicamente segun se escribe @started(18-09-27 20:58) @done(18-09-27 20:58) @lasted(21s)
-      En realidad no será invisible el textarea si no que el texto será del mismo color que el fondo y los componentes se crearán encima de este, pero el ratón no les afectará.
-      Cuando comienzas a escribir, el texto siempre es una anotación, es decir, será gris, no tendrá estado pero se le podran poner etiquetas con @today 
-      Si detecta una arroba se crea un @hohoh 
+  ✔ El textarea en realidad debe de ser invisible y que los componentes se vayan creando dinamicamente segun se escribe @started(18-09-27 20:58) @done(18-09-27 20:58) @lasted(21s)
+    En realidad no será invisible el textarea si no que el texto será del mismo color que el fondo y los componentes se crearán encima de este, pero el ratón no les afectará.
+    Cuando comienzas a escribir, el texto siempre es una anotación, es decir, será gris, no tendrá estado pero se le podran poner etiquetas con @today 
+    Si detecta una arroba se crea un @hohoh 
     
   Shortcuts:
       [Tab] Incrementar Indentation.
