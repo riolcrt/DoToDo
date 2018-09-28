@@ -10,12 +10,14 @@ import { NgxsModule} from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsRouterPluginModule } from '@ngxs/router-plugin';
+import { TodoItemComponent } from './todo-item/todo-item.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     StatusBarComponent,
-    TextEditorComponent
+    TextEditorComponent,
+    TodoItemComponent
   ],
   imports: [
     BrowserModule,
