@@ -67,7 +67,16 @@ Main Roadmap:
     ✔ Matchear la posición de los todos y del textarea @done(18-09-28 11:54)
 
   ☐ Mandar un UpdateText al comenzar por si hay texto en el text-box
+  
   ☐ Investigar el doble espacio de white-space: pre-wrap
+    Cuando le meto a las ToDos la regla white-space: pre-wrap
+    para que respete los espacios en blanco que se dejen en el editor
+    me mete un espacio extra que have que se descuadre del textarea, y es un por culo.
+
+  ☐ Arreglar el scroll
+    Ahora mismo no tiene scroll la pagina por lo que si pegas un texto mas grande que la altura de la pantalla se va todo a la puta
+    Habrá que implementar una directiva para que el textarea haga autogrow, y no limitar la altura del body a 100mh
+    Tambien habrá que poner la statusbar en position fixed y arriba del todo de la pantalla a ser posible.
   ✔ RegExp para los tipos de tareas @done(18-09-28 12:45)
   
   Actualizar el tipo de las tareas según si matchean alguna expresión regular.
