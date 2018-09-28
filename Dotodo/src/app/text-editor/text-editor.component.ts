@@ -1,8 +1,7 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { UpdateText } from '../shared/TodosActions';
-import { Observable, fromEvent} from 'rxjs';
-import { map, filter, takeWhile } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { TodoItem, TodoItemTypeEnum } from '../shared/TodosModel';
 import { TodosState } from '../shared/TodosState';
 
