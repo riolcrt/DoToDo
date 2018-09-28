@@ -9,6 +9,7 @@ export enum TodoItemTagTypeEnum { Critical, Started, Done, Canceled  }
 
 export interface TodoItem {
     text: string;
+    end: number;
     indentation: number;
     type: string[];
     tags: TodoItemTag[];

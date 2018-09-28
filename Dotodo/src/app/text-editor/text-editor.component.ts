@@ -1,9 +1,11 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { UpdateText } from '../shared/TodosActions';
+import { UpdateText, ShortCutPressed } from '../shared/TodosActions';
 import { Observable } from 'rxjs';
 import { TodoItem, TodoItemTypeEnum } from '../shared/TodosModel';
 import { TodosState } from '../shared/TodosState';
+import { store } from '@angular/core/src/render3/instructions';
+import { stat } from 'fs';
 
 @Component({
   selector: 'app-text-editor',
@@ -27,17 +29,20 @@ export class TextEditorComponent implements OnInit {
   }
 
   onShortcut(e: KeyboardEvent ) {
+    const target: HTMLTextAreaElement = e.target as HTMLTextAreaElement;
     if (e.altKey || e.code === 'Tab') {
       switch (e.key) {
         case 'Tab':
           if (e.shiftKey) {
             console.log ('decrease indent');
+            this.state.dispatch(new ShortCutPressed(target.selectionStart));
             break;
           }
           console.log ('increase indent');
           break;
         case 'd':
           console.log ('set as done');
+          console.log (target.selectionStart);
           break;
         case 's':
           console.log ('set as started');
