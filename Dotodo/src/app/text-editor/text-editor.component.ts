@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { UpdateText } from '../shared/TodosActions';
 import { Observable } from 'rxjs';
-import { TodoItem } from '../shared/TodosModel';
+import { TodoItem, TodoItemTypeEnum } from '../shared/TodosModel';
 import { TodosState } from '../shared/TodosState';
 
 @Component({
@@ -11,6 +11,7 @@ import { TodosState } from '../shared/TodosState';
   styleUrls: ['./text-editor.component.css']
 })
 export class TextEditorComponent implements OnInit {
+  public todoType: typeof TodoItemTypeEnum = TodoItemTypeEnum;
   public todos$: Observable<TodoItem[]> = this.state.select(TodosState.GetTodoItems);
 
   constructor (private state: Store, private el: ElementRef) {

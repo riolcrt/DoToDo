@@ -9,12 +9,11 @@ Soy un grupo:
 - Soy una tarea terminada @done(2018-09-28T09:50:17.079Z)
 - Soy una tarea terminada con tiempo @started(2018-09-28T09:50:17.079Z) @done(2018-09-28T09:50:17.079Z)
 - Soy una tarea cancelada @cancelled(2018-09-28T09:50:17.079Z)
-- Soy una tarea con tiempo wasted @started(2018-09-28T09:50:17.079Z) @canceled(2018-09-28T09:50:17.079Z)
-        </textarea>
+- Soy una tarea con tiempo wasted @started(2018-09-28T09:50:17.079Z) @cancelled(2018-09-28T09:50:17.079Z)</textarea>
       </form>
       
       <div id="todo-container">
-        <app-todo-item *ngFor ='let todo of todos$ | async' [text]=todo.text></app-todo-item>
+        <app-todo-item *ngFor ='let todo of todos$ | async' [text]=todo.text [ngClass]=todo.type></app-todo-item>
       </div>
 </div>
 

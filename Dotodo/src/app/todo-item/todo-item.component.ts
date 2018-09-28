@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input  } from '@angular/core';
+import { regexes } from '../regex';
 
 @Component({
   selector: 'app-todo-item',
@@ -7,5 +8,5 @@ import { Component, Input } from '@angular/core';
 })
 export class TodoItemComponent {
   @Input() text: string;
-  constructor() {}
+  @Input() types: string[];
 }

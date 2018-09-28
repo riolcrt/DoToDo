@@ -29,8 +29,15 @@ Main Roadmap:
   ✔ Arreglar vulnerabilidades @started(18-09-27 19:37) @done(18-09-27 19:38) @lasted(1m13s)
   ✔ Generar la estructura general de la aplicación. @started(18-09-27 19:30) @done(18-09-27 20:36) @lasted(1h6m35s)
   ✔ Definir funcionamiento de la aplicación @started(18-09-27 20:36) @done(18-09-27 20:57) @lasted(21m37s)
-    ☐ Voy a tener que bindear para prevenir que el tabulador se salga del textarea
-    ☐ Voy a tener que bindear todos los atajos de teclado
+    
+    Voy a tener que bindear todos los atajos de teclado:
+      ☐ [Tab] Incrementar Indentation.
+      ☐ [Shift + Tab ] Reducir Indentation.
+      ☐ [Alt + d] Terminar ToDo.
+      ☐ [Alt + s] Comenzar ToDo.
+      ☐ [Alt + c] Cancelar ToDo.
+
+
     ✔ El textarea en realidad debe de ser invisible y que los componentes se vayan creando dinamicamente segun se escribe @started(18-09-27 20:58) @done(18-09-27 20:58) @lasted(21s)
       En realidad no será invisible el textarea si no que el texto será del mismo color que el fondo y los componentes se crearán encima de este, pero el ratón no les afectará.
       Cuando comienzas a escribir, el texto siempre es una anotación, es decir, será gris, no tendrá estado pero se le podran poner etiquetas con @today 
@@ -79,4 +86,7 @@ Main Roadmap:
     Tambien habrá que poner la statusbar en position fixed y arriba del todo de la pantalla a ser posible.
   ✔ RegExp para los tipos de tareas @done(18-09-28 12:45)
   
-  Actualizar el tipo de las tareas según si matchean alguna expresión regular.
+  ✔ Añadir tipo a los ToDos @started(18-09-28 13:35) @done(18-09-28 17:48) @lasted(4h13m38s)
+    ✔ Crear estilos para los diferentes tipos @done(18-09-28 17:48)
+    ☐ Crear Expresión regular para detectar el objeto date en los tags.
+

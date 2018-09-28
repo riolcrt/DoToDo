@@ -2,6 +2,7 @@ import { State, Action, StateContext, Selector, } from '@ngxs/store';
 import { TodosStateModel, TodoItem, TodoItemTypeEnum } from './TodosModel';
 import { UpdateText } from './TodosActions';
 import { regexes } from '../regex';
+import { text } from '@angular/core/src/render3/instructions';
 ​
 @State<TodosStateModel>({
     name: 'todos',
@@ -19,7 +20,7 @@ export class TodosState  {
         const itemsMaped = items.map(item => {
             return {
                 text: item,
-                type: this.parseType(item)
+                type: this.parseType(item, regexes)
             } as TodoItem;
         });
 
@@ -29,23 +30,7 @@ export class TodosState  {
         });
     }
 
-    parseType (text: string): TodoItemTypeEnum {
-        if (regexes.todo.test(text) === true) {
-            return TodoItemTypeEnum.Todo;
-        }
-
-        if (regexes.todoCancelled.test(text) === true) {
-            return TodoItemTypeEnum.TodoDone;
-        }
-
-        if (regexes.todoDone.test(text) === true) {
-            return TodoItemTypeEnum.TodoCanceled;
-        }
-
-        if (regexes.todoBox.test(text) === true) {
-            return TodoItemTypeEnum.Group;
-        }
-
-        return TodoItemTypeEnum.Annotation;
+    parseType (textToTest: string, regex: any): string[] {
+        return  Object.keys(regex).filter( x => textToTest.match(regex[x]) !== null);
     }
 }

@@ -2,9 +2,27 @@
     pointer-events: none;
     font-size: 1em;
     display: block;
+    color: darkcyan
 }
 
 p {
     display: inline;
     white-space: pre-wrap;
+}
+
+:host.todo {
+    color: white;
+}
+
+:host.todoDone {
+    color: greenyellow;
+}
+
+:host.todoCancelled {
+    color: red;
+}
+
+
+:host.group {
+    color: aqua;
 }
