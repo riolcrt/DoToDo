@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { UpdateText } from '../shared/TodosActions';
 import { Observable } from 'rxjs';
@@ -10,15 +10,24 @@ import { TodosState } from '../shared/TodosState';
   templateUrl: './text-editor.component.html',
   styleUrls: ['./text-editor.component.css']
 })
-export class TextEditorComponent  {
-  constructor (private state: Store) {
+export class TextEditorComponent implements OnInit {
+  public todos$: Observable<TodoItem[]> = this.state.select(TodosState.GetTodoItems);
+
+  constructor (private state: Store, private el: ElementRef) {
     this.todos$.subscribe(x => console.log ('recibido mediante subscripcion', x));
   }
 
-  public todos$: Observable<TodoItem[]> = this.state.select(TodosState.GetTodoItems);
+  ngOnInit() {
+    const textArea: HTMLTextAreaElement = this.el.nativeElement.querySelector('textarea');
+    this.dispatchUpdate(textArea.value);
+  }
 
   onTextInput (e: TextEvent) {
     const target: HTMLTextAreaElement = e.target as HTMLTextAreaElement;
-    this.state.dispatch(new UpdateText(target.value));
+    this.dispatchUpdate(target.value);
+  }
+
+  dispatchUpdate(payload: string) {
+    this.state.dispatch(new UpdateText(payload));
   }
 }

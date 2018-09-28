@@ -42,7 +42,7 @@ Main Roadmap:
       [Alt + d] Terminar Todo.
       [Alt + s] Comenzar Todo.
       [Alt + c] Cancelar Todo.
-
+  
   Definir modelo TODOS: 
     - Definir TodosStateModel:
       Elements: Element[]
@@ -65,7 +65,9 @@ Main Roadmap:
     ✔ Generar el selector en el estado para devolver los ToDos. @done(18-09-28 11:47)
     ✔ Generar el ngfor para dibujar los todos en el texteditor @done(18-09-28 11:48)
     ✔ Matchear la posición de los todos y del textarea @done(18-09-28 11:54)
-    
+
   ☐ Mandar un UpdateText al comenzar por si hay texto en el text-box
-  ☐ RegExp para los tipos de tareas
-  ☐ Controlar Indentaciones
+  ☐ Investigar el doble espacio de white-space: pre-wrap
+  ✔ RegExp para los tipos de tareas @done(18-09-28 12:45)
+  
+  Actualizar el tipo de las tareas según si matchean alguna expresión regular.
