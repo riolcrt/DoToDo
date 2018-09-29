@@ -38,6 +38,6 @@ export class TodosState  {
     onShortcutPressed( ctx: StateContext<TodosStateModel>, payload: ShortCutPressed) {
         const currentText = ctx.getState().editorText;
         const currentLine = currentText.substr(0, payload.caretPosition).split('\n').length;
-        console.log (ctx.getState().todos[currentLine]);
+        console.log (ctx.getState().todos[currentLine - 1]);
     }
 }

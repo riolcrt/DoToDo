@@ -4,8 +4,6 @@ import { UpdateText, ShortCutPressed } from '../shared/TodosActions';
 import { Observable } from 'rxjs';
 import { TodoItem, TodoItemTypeEnum } from '../shared/TodosModel';
 import { TodosState } from '../shared/TodosState';
-import { store } from '@angular/core/src/render3/instructions';
-import { stat } from 'fs';
 
 @Component({
   selector: 'app-text-editor',
