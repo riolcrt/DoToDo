@@ -44,12 +44,11 @@ describe('TextEditorComponent', () => {
     const case4 = '@done @started(mayo del 90)';
     const case5 = '@done with more text';
 
-    expect(component.selectTagInLine(case3, '@done').endPosition).toBe(15, 'because it has date');
     expect(component.selectTagInLine(case1, '@done')).toBe(null);
     expect(component.selectTagInLine(case2, '@done').startPosition).toBe(0);
     expect(component.selectTagInLine(case2, '@done').endPosition).toBe(5);
     expect(component.selectTagInLine(case3, '@done').startPosition).toBe(5);
-
+    expect(component.selectTagInLine(case3, '@done').endPosition).toBe(15, 'because it has date');
     expect(component.selectTagInLine(case4, '@done').endPosition).toBe(5, 'because it have no date');
     expect(component.selectTagInLine(case5, '@done').endPosition).toBe(5);
   });
