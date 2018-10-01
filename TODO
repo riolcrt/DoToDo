@@ -67,7 +67,7 @@ Main Roadmap:
     Cada Todo Se Representará con [], el estado del todo se sacará de los corchetes. [] -> idle, [s:date] -> started, [d: date ] -> done,  [c: date] -> cancel
     Cada TODO tendrá estado tambien, podrá estar En espera, Comenzado, Finalizado o Cancelado.
 
-  ✔ Generar Items or cada ToDo en el estado @done(18-09-28 11:59)
+  ✔ Generar Items or cada ToDo en el estado @done(18-10-01 12:40)
     ✔ Generar el selector en el estado para devolver los ToDos. @done(18-09-28 11:47)
     ✔ Generar el ngfor para dibujar los todos en el texteditor @done(18-09-28 11:48)
     ✔ Matchear la posición de los todos y del textarea @done(18-09-28 11:54)
@@ -89,3 +89,8 @@ Main Roadmap:
     ✔ Crear estilos para los diferentes tipos @done(18-09-28 17:48)
     ☐ Crear Expresión regular para detectar el objeto date en los tags.
 
+
+Añadir tags mediante shortcuts:
+  ✔ Detectar si el tag ya existe en dicha linea y devolver su posición en dicha linea. @done(18-10-01 15:25)
+  ☐ Borrar tag si ya existe
+  ☐ Crear tag con la hora actual si no existe

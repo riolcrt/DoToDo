@@ -5,7 +5,7 @@ export interface TodosStateModel {
 }
 
 export enum TodoItemTypeEnum { Annotation, Group, Todo, TodoCanceled, TodoDone }
-export enum TodoItemTagTypeEnum { Critical, Started, Done, Canceled  }
+export enum TagTypeEnum {  Start, Cancel, Done  }
 
 export interface TodoItem {
     text: string;
@@ -16,6 +16,6 @@ export interface TodoItem {
 }
 
 export interface TodoItemTag {
-    text: string;
-    type: TodoItemTagTypeEnum;
+    date: Date;
+    type: TagTypeEnum;
 }

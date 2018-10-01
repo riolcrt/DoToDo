@@ -1,6 +1,6 @@
 import { State, Action, StateContext, Selector, } from '@ngxs/store';
-import { TodosStateModel, TodoItem, TodoItemTypeEnum } from './TodosModel';
-import { UpdateText, ShortCutPressed } from './TodosActions';
+import { TodosStateModel, TodoItem, TodoItemTypeEnum, TagTypeEnum, TodoItemTag } from './TodosModel';
+import { UpdateText } from './TodosActions';
 import { regexes } from '../regex';
 import { text } from '@angular/core/src/render3/instructions';
 ​
@@ -9,9 +9,15 @@ import { text } from '@angular/core/src/render3/instructions';
 })
 export class TodosState  {
     @Selector()
+    static GetCurrentText (state: TodosStateModel) {
+        return state.editorText;
+    }
+    @Selector()
     static GetTodoItems(state: TodosStateModel) {
         return state.todos;
     }
+
+
 
     @Action(UpdateText)
     onUpdateText( ctx: StateContext<TodosStateModel>, payload: UpdateText) {
@@ -34,10 +40,4 @@ export class TodosState  {
         return  Object.keys(regex).filter( x => textToTest.match(regex[x]) !== null);
     }
 
-    @Action(ShortCutPressed)
-    onShortcutPressed( ctx: StateContext<TodosStateModel>, payload: ShortCutPressed) {
-        const currentText = ctx.getState().editorText;
-        const currentLine = currentText.substr(0, payload.caretPosition).split('\n').length;
-        console.log (ctx.getState().todos[currentLine - 1]);
-    }
 }
