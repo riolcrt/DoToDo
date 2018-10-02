@@ -61,9 +61,9 @@ export class TextEditorComponent implements OnInit {
         }
         target.selectionStart = caretPosition;
         target.selectionEnd = caretPosition;
+        this.dispatchUpdate(target.value);
       }
     });
-    this.dispatchUpdate(target.value);
   }
   dispatchUpdate(payload: string) {
     this.state.dispatch(new UpdateText(payload));
