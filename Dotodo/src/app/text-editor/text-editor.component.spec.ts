@@ -90,16 +90,4 @@ describe('TextEditorComponent', () => {
     const originalText = 'This is the original text with no tag';
     expect(component.deleteTagFromLine(originalText, '@done', 0)).toBe(originalText);
   });
-
-  it ('should check if current line is a task', () => {
-    expect(component.isToDo('- Yeah im a todo')).toBe(true);
-    expect(component.isToDo('Im not a todo')).toBe(false);
-    expect(component.isToDo('-Im not a todo')).toBe(false);
-  });
-
-  it ('should check if current line is done or cancel or started', () => {
-    expect(component.isFinished('im a @done')).toBe(true);
-    expect(component.isFinished('im a @started')).toBe(false);
-    expect(component.isFinished('im a @cancelled')).toBe(true);
-  });
 });

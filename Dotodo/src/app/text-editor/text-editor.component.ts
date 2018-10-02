@@ -39,7 +39,7 @@ export class TextEditorComponent implements OnInit {
 
     TODOITEM_SHORTCUTS.forEach(x => {
       if (event.key === x.key) {
-        this.toogleTag(target.value, x.tagType, caretPosition, target, undefined);
+        this.updateTextArea(target.value, x.tagType, caretPosition, target);
         target.selectionStart = caretPosition;
         target.selectionEnd = caretPosition;
       }
@@ -48,14 +48,6 @@ export class TextEditorComponent implements OnInit {
 
   dispatchUpdate(payload: string) {
     this.state.dispatch(new UpdateText(payload));
-  }
-
-  isToDo(lineText: string): boolean {
-    return lineText.match(regexes.todo) !== null;
-  }
-
-  isFinished (lineText: string): boolean {
-    return lineText.match(regexes.tagFinished) !== null;
   }
 
   getLineNumber(caretPosition: number, originalText): number {
@@ -109,14 +101,16 @@ export class TextEditorComponent implements OnInit {
     }
   }
 
-
   toogleTag(originalText: string, tag: TagTypeEnum, caretPosition: number, el: HTMLTextAreaElement, details) {
+    // ToDo Text.
     const lineText = this.getLineText(caretPosition, originalText);
 
+    // Validation
     if (!this.validationService.validateShortcut(lineText, tag)) {
       return;
     }
 
+    // Toggle
     if (this.findTagInLine(lineText, tag.toString()) !== undefined) {
       el.value = this.deleteTagFromLine(originalText, tag.toString(), caretPosition);
     } else {
@@ -124,5 +118,9 @@ export class TextEditorComponent implements OnInit {
     }
 
     this.dispatchUpdate(el.value);
+  }
+
+  updateTextArea(originalText: string, tag: TagTypeEnum, caretPosition: number, el: HTMLTextAreaElement): void {
+
   }
 }
