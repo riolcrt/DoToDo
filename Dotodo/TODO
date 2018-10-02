@@ -87,16 +87,23 @@ Main Roadmap:
   
   ✔ Añadir tipo a los ToDos @started(18-09-28 13:35) @done(18-09-28 17:48) @lasted(4h13m38s)
     ✔ Crear estilos para los diferentes tipos @done(18-09-28 17:48)
-    ☐ Crear Expresión regular para detectar el objeto date en los tags.
+    ✔ Crear Expresión regular para detectar el objeto date en los tags. @done(18-10-02 12:37)
 
 Text-Editor-Component:
-  ☐ Refactorizar selectTagInLine
   ☐ Extraer toda la logica del tratamiento de tags a un servicio
   
 Añadir tags mediante shortcuts:
   ✔ Detectar si el tag ya existe en dicha linea y devolver su posición en dicha linea. @done(18-10-01 15:25)
   ✔ Borrar tag si ya existe @done(18-10-02 12:06)
   ✔ Crear tag con la hora actual si no existe @done(18-10-02 12:06)
+  ☐ Solo las tareas se pueden comenzar, terminar o cancelar.
+    ☐ Comprobar si una linea en el shortcut es una tarea.
+  ☐ Una tarea cancelada no puede ser terminada.
+  ☐ Una tarea terminada no puede ser cancelada.
+  ☐ Una tarea terminada o cancelada no puede ser empezada.
+  ☐ El tag started no puede ser eliminado de tareas completadas.
+  ☐ Cuando una tarea se termina o cancela y estaba comenzada en los detalles se añade el timespan transcurrido desde que empezó hasta que terminó. La etiqueta started se cambia por ellapsed
+  ☐ Si una tarea tiene el tag started y se le elimina, se crea el tag ellapsed con el tiempo que estuvo activa.
 
 Bugs:
   ✔ No deberia enviar el evento textupdate al estado mientras tenemos alt presionado @done(18-10-02 09:13)

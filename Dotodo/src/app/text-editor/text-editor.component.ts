@@ -29,10 +29,8 @@ export class TextEditorComponent implements OnInit {
 
   onShortcut(event: KeyboardEvent ) {
     const target: HTMLTextAreaElement = event.target as HTMLTextAreaElement;
-    const currentText: string = target.value;
     const caretPosition: number = target.selectionStart;
 
-    console.log (target.selectionStart);
 
     if (event.altKey || event.code === 'Tab') {
       event.preventDefault();
@@ -40,17 +38,7 @@ export class TextEditorComponent implements OnInit {
 
     TODOITEM_SHORTCUTS.forEach(x => {
       if (event.key === x.key) {
-        switch (x.action) {
-          case TagTypeEnum.Done:
-            this.toogleTag(target.value, '@done', target.selectionStart, target, undefined);
-            break;
-          case TagTypeEnum.Start:
-            this.toogleTag(target.value, '@started', target.selectionStart, target, undefined);
-            break;
-          case TagTypeEnum.Cancel:
-            this.toogleTag(target.value, '@cancelled', target.selectionStart, target, undefined);
-            break;
-        }
+        this.toogleTag(target.value, `@${TagTypeEnum[x.action].toLowerCase()}`, caretPosition, target, undefined);
         target.selectionStart = caretPosition;
         target.selectionEnd = caretPosition;
         this.dispatchUpdate(target.value);

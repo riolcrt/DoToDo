@@ -8,11 +8,11 @@ export const TODOITEM_SHORTCUTS = [{
   {
     altKey: true,
     key: 's',
-    action: TagTypeEnum.Start
+    action: TagTypeEnum.Started
   },
   {
     altKey: true,
     key: 'c',
-    action: TagTypeEnum.Cancel
+    action: TagTypeEnum.Cancelled
   }
 ];

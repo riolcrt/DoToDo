@@ -22,6 +22,10 @@ p {
     color: red;
 }
 
+:host.tagStarted {
+    color: yellow;
+}
+
 
 :host.group {
     color: aqua;
