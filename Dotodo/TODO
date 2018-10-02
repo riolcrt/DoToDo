@@ -97,7 +97,7 @@ Añadir tags mediante shortcuts:
   ✔ Borrar tag si ya existe @done(18-10-02 12:06)
   ✔ Crear tag con la hora actual si no existe @done(18-10-02 12:06)
   ☐ Solo las tareas se pueden comenzar, terminar o cancelar.
-    ☐ Comprobar si una linea en el shortcut es una tarea.
+    ☐ Comprobar si una linea en el shortcut es una tarea. @started(18-10-02 12:53)
   ☐ Una tarea cancelada no puede ser terminada.
   ☐ Una tarea terminada no puede ser cancelada.
   ☐ Una tarea terminada o cancelada no puede ser empezada.

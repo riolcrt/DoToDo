@@ -39,15 +39,20 @@ export class TextEditorComponent implements OnInit {
     TODOITEM_SHORTCUTS.forEach(x => {
       if (event.key === x.key) {
         this.toogleTag(target.value, `@${TagTypeEnum[x.action].toLowerCase()}`, caretPosition, target, undefined);
+        this.dispatchUpdate(target.value);
+
         target.selectionStart = caretPosition;
         target.selectionEnd = caretPosition;
-        this.dispatchUpdate(target.value);
       }
     });
   }
 
   dispatchUpdate(payload: string) {
     this.state.dispatch(new UpdateText(payload));
+  }
+
+  isToDo(lineText: string): boolean {
+    return lineText.match(regexes.todo) !== null;
   }
 
   getLineNumber(caretPosition: number, originalText): number {
