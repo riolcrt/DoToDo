@@ -39,7 +39,7 @@ export class TextEditorComponent implements OnInit {
 
     TODOITEM_SHORTCUTS.forEach(x => {
       if (event.key === x.key) {
-        this.updateTextArea(target.value, x.tagType, caretPosition, target);
+        this.updateTextAreaOnShortcut(target.value, x.tagType, caretPosition, target);
         target.selectionStart = caretPosition;
         target.selectionEnd = caretPosition;
       }
@@ -81,7 +81,7 @@ export class TextEditorComponent implements OnInit {
   addTagToLine(
     originalText: string,
     tag: string,
-    details: string = new Date(Date.now()).toLocaleString(),
+    details: string,
     caretPosition: number): string {
       const lineEndPosition = this.getLineEndPosition(caretPosition, originalText);
       return `${originalText.slice(0, lineEndPosition)} ${tag}(${details})${originalText.slice(lineEndPosition)}`;
@@ -101,17 +101,9 @@ export class TextEditorComponent implements OnInit {
     }
   }
 
-  toogleTag(originalText: string, tag: TagTypeEnum, caretPosition: number, el: HTMLTextAreaElement, details) {
-    // ToDo Text.
-    const lineText = this.getLineText(caretPosition, originalText);
-
-    // Validation
-    if (!this.validationService.validateShortcut(lineText, tag)) {
-      return;
-    }
-
+  toogleTag(originalText: string, toDoText: string, tag: TagTypeEnum, caretPosition: number, el: HTMLTextAreaElement, details) {
     // Toggle
-    if (this.findTagInLine(lineText, tag.toString()) !== undefined) {
+    if (this.findTagInLine(toDoText, tag.toString()) !== undefined) {
       el.value = this.deleteTagFromLine(originalText, tag.toString(), caretPosition);
     } else {
       el.value = this.addTagToLine(originalText, tag.toString(), details, caretPosition);
@@ -120,7 +112,15 @@ export class TextEditorComponent implements OnInit {
     this.dispatchUpdate(el.value);
   }
 
-  updateTextArea(originalText: string, tag: TagTypeEnum, caretPosition: number, el: HTMLTextAreaElement): void {
+  updateTextAreaOnShortcut(originalText: string, tag: TagTypeEnum, caretPosition: number, el: HTMLTextAreaElement): void {
+    // ToDo Text.
+    const toDoText = this.getLineText(caretPosition, originalText);
 
+    // Validation
+    if (!this.validationService.validateShortcut(toDoText, tag)) {
+      return;
+    }
+
+    this.toogleTag(originalText, toDoText, tag, caretPosition, el, new Date(Date.now()).toLocaleString());
   }
 }
