@@ -3,16 +3,16 @@ import { TagTypeEnum } from '../shared/TodosModel';
 export const TODOITEM_SHORTCUTS = [{
     altKey: true,
     key: 'd',
-    action: TagTypeEnum.Done
+    tagType: TagTypeEnum.Done
   } ,
   {
     altKey: true,
     key: 's',
-    action: TagTypeEnum.Started
+    tagType: TagTypeEnum.Started
   },
   {
     altKey: true,
     key: 'c',
-    action: TagTypeEnum.Cancelled
+    tagType: TagTypeEnum.Cancelled
   }
 ];

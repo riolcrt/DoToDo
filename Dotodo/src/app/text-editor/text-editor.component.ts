@@ -2,10 +2,11 @@ import { Component, ElementRef, OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { UpdateText } from '../shared/TodosActions';
 import { Observable } from 'rxjs';
-import { TodoItem, TodoItemTypeEnum, TagTypeEnum } from '../shared/TodosModel';
+import { TodoItem, TodoItemTypeEnum, TagTypeEnum, ShortcutValidationErrorEnum } from '../shared/TodosModel';
 import { TodosState } from '../shared/TodosState';
 import { TODOITEM_SHORTCUTS } from '../constants/shortcuts';
 import { regexes } from '../regex';
+import { ShortcutValidationService } from '../shortcut-validation.service';
 
 @Component({
   selector: 'app-text-editor',
@@ -15,7 +16,7 @@ import { regexes } from '../regex';
 export class TextEditorComponent implements OnInit {
   public todoType: typeof TodoItemTypeEnum = TodoItemTypeEnum;
   public todos$: Observable<TodoItem[]> = this.state.select(TodosState.GetTodoItems);
-  constructor (private state: Store, private el: ElementRef) {}
+  constructor (private state: Store, private validationService: ShortcutValidationService, private el: ElementRef) {}
 
   ngOnInit() {
     const textArea: HTMLTextAreaElement = this.el.nativeElement.querySelector('textarea');
@@ -38,9 +39,7 @@ export class TextEditorComponent implements OnInit {
 
     TODOITEM_SHORTCUTS.forEach(x => {
       if (event.key === x.key) {
-        this.toogleTag(target.value, `@${TagTypeEnum[x.action].toLowerCase()}`, caretPosition, target, undefined);
-        this.dispatchUpdate(target.value);
-
+        this.toogleTag(target.value, x.tagType, caretPosition, target, undefined);
         target.selectionStart = caretPosition;
         target.selectionEnd = caretPosition;
       }
@@ -53,6 +52,10 @@ export class TextEditorComponent implements OnInit {
 
   isToDo(lineText: string): boolean {
     return lineText.match(regexes.todo) !== null;
+  }
+
+  isFinished (lineText: string): boolean {
+    return lineText.match(regexes.tagFinished) !== null;
   }
 
   getLineNumber(caretPosition: number, originalText): number {
@@ -106,12 +109,20 @@ export class TextEditorComponent implements OnInit {
     }
   }
 
-  toogleTag(originalText: string, tag: string, caretPosition: number, el: HTMLTextAreaElement, details) {
+
+  toogleTag(originalText: string, tag: TagTypeEnum, caretPosition: number, el: HTMLTextAreaElement, details) {
     const lineText = this.getLineText(caretPosition, originalText);
-    if (this.findTagInLine(lineText, tag) !== undefined) {
-      el.value = this.deleteTagFromLine(originalText, tag, caretPosition);
-    } else {
-      el.value = this.addTagToLine(originalText, tag, details, caretPosition);
+
+    if (!this.validationService.validateShortcut(lineText, tag)) {
+      return;
     }
+
+    if (this.findTagInLine(lineText, tag.toString()) !== undefined) {
+      el.value = this.deleteTagFromLine(originalText, tag.toString(), caretPosition);
+    } else {
+      el.value = this.addTagToLine(originalText, tag.toString(), details, caretPosition);
+    }
+
+    this.dispatchUpdate(el.value);
   }
 }

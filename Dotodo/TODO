@@ -91,17 +91,19 @@ Main Roadmap:
 
 Text-Editor-Component:
   ☐ Extraer toda la logica del tratamiento de tags a un servicio
+  ✔ Extraer toda la logica de la validación en un servicio @done(18-10-02 16:43)
   
 Añadir tags mediante shortcuts:
   ✔ Detectar si el tag ya existe en dicha linea y devolver su posición en dicha linea. @done(18-10-01 15:25)
   ✔ Borrar tag si ya existe @done(18-10-02 12:06)
   ✔ Crear tag con la hora actual si no existe @done(18-10-02 12:06)
-  ☐ Solo las tareas se pueden comenzar, terminar o cancelar.
-    ☐ Comprobar si una linea en el shortcut es una tarea. @started(18-10-02 12:53)
-  ☐ Una tarea cancelada no puede ser terminada.
-  ☐ Una tarea terminada no puede ser cancelada.
-  ☐ Una tarea terminada o cancelada no puede ser empezada.
-  ☐ El tag started no puede ser eliminado de tareas completadas.
+  ✔ Solo las tareas se pueden comenzar, terminar o cancelar. @done(18-10-02 13:06)
+    ✔ Comprobar si una linea en el shortcut es una tarea. @started(18-10-02 13:00) @done(18-10-02 13:00) @lasted(12s)
+Validacion de shortcuts:
+  ✔ Una tarea done no puede ser cancelada. @done(18-10-02 16:55)
+  ✔ Una tarea finished o cancelada no puede ser empezada. @done(18-10-02 16:55)
+  ✔ El tag started no puede ser eliminado de tareas completadas. @done(18-10-02 16:56)
+Shortcuts Side Effects:
   ☐ Cuando una tarea se termina o cancela y estaba comenzada en los detalles se añade el timespan transcurrido desde que empezó hasta que terminó. La etiqueta started se cambia por ellapsed
   ☐ Si una tarea tiene el tag started y se le elimina, se crea el tag ellapsed con el tiempo que estuvo activa.
 

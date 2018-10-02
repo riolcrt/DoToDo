@@ -4,6 +4,7 @@ import { TextEditorComponent } from './text-editor.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { NgxsModule } from '@ngxs/store';
 import { TodosState } from '../shared/TodosState';
+import { TagTypeEnum } from '../shared/TodosModel';
 
 describe('TextEditorComponent', () => {
   let component: TextEditorComponent;
@@ -94,5 +95,11 @@ describe('TextEditorComponent', () => {
     expect(component.isToDo('- Yeah im a todo')).toBe(true);
     expect(component.isToDo('Im not a todo')).toBe(false);
     expect(component.isToDo('-Im not a todo')).toBe(false);
+  });
+
+  it ('should check if current line is done or cancel or started', () => {
+    expect(component.isFinished('im a @done')).toBe(true);
+    expect(component.isFinished('im a @started')).toBe(false);
+    expect(component.isFinished('im a @cancelled')).toBe(true);
   });
 });

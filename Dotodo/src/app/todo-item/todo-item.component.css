@@ -15,14 +15,14 @@ p {
 }
 
 :host.todoDone {
-    color: greenyellow;
+    color: greenyellow!important;
 }
 
 :host.todoCancelled {
-    color: red;
+    color: red!important;
 }
 
-:host.tagStarted {
+:host.todoStarted {
     color: yellow;
 }
 
