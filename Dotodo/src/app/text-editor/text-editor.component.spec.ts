@@ -37,19 +37,56 @@ describe('TextEditorComponent', () => {
     expect(component.getLineEndPosition(22, textTest)).toBe(32);
   });
 
-  it ('should detect if tag already exist in current line and return position', () => {
-    const case1 = 'There is no tags in this line';
-    const case2 = '@done';
-    const case3 = '12345@done(2345)';
-    const case4 = '@done @started(mayo del 90)';
-    const case5 = '@done with more text';
+  it ('should get the current line start position', () => {
+    const textTest = `1234567890
+1234567890
+1234567890`;
+  expect(component.getLineStartPosition(1, textTest)).toBe(0);
+  expect(component.getLineStartPosition(11, textTest)).toBe(11);
+  expect(component.getLineStartPosition(22, textTest)).toBe(22);
+  });
 
-    expect(component.selectTagInLine(case1, '@done')).toBe(null);
-    expect(component.selectTagInLine(case2, '@done').startPosition).toBe(0);
-    expect(component.selectTagInLine(case2, '@done').endPosition).toBe(5);
-    expect(component.selectTagInLine(case3, '@done').startPosition).toBe(5);
-    expect(component.selectTagInLine(case3, '@done').endPosition).toBe(15, 'because it has date');
-    expect(component.selectTagInLine(case4, '@done').endPosition).toBe(5, 'because it have no date');
-    expect(component.selectTagInLine(case5, '@done').endPosition).toBe(5);
+  it ('should return the tag in current line', () => {
+    const case1 = 'No tengo fecha @done';
+    expect(component.findTagInLine(case1, '@done')).toBe(' @done');
+  });
+
+  it ('should return the tag without date if date parenthesis are open', () => {
+    expect(component.findTagInLine('Tengo fecha @done(Mi fecha', '@done')).toBe(' @done');
+  });
+
+  it ('should return the tag in current line with date', () => {
+    expect(component.findTagInLine('Tengo fecha @done(Mi-fecha)', '@done')).toBe(' @done(Mi-fecha)');
+  });
+
+  it ('should return undefined if tag is not found', () => {
+    const text = 'Tengo fecha @done(Mi fecha)';
+    expect(component.findTagInLine(text, '@done')).toBe(' @done(Mi fecha)');
+  });
+
+  it ('should add the tag text with current date to original text', () => {
+    const details = 'ellapsed 1h';
+
+    const case1 = 'Soy una linea';
+    const case1Result = component.addTagToLine(case1, '@done', details, 0);
+    expect(case1Result).toBe('Soy una linea @done(ellapsed 1h)');
+
+    const case2 = 'Soy una linea\nyo soy otra';
+    const case2Result = component.addTagToLine(case2, '@done', details, 0);
+    expect(case2Result).toBe('Soy una linea @done(ellapsed 1h)\nyo soy otra');
+  });
+
+  it ('should delete a tag if it already exist', () => {
+    const case1 = 'Soy una linea con tag @done(ellapsed)';
+    expect(component.deleteTagFromLine(case1, '@done', 26)).toBe('Soy una linea con tag');
+
+    const case2 = 'Soy una linea sin tag\notra sin tag\nyo si tengo tag @done(ellapsed)';
+    expect(component.deleteTagFromLine(case2, '@done', 38)).toBe('Soy una linea sin tag\notra sin tag\nyo si tengo tag');
+
+  });
+
+  it ('should return the original text if you try to delete a non existing tag in line', () => {
+    const originalText = 'This is the original text with no tag';
+    expect(component.deleteTagFromLine(originalText, '@done', 0)).toBe(originalText);
   });
 });

@@ -89,11 +89,14 @@ Main Roadmap:
     ✔ Crear estilos para los diferentes tipos @done(18-09-28 17:48)
     ☐ Crear Expresión regular para detectar el objeto date en los tags.
 
-
+Text-Editor-Component:
+  ☐ Refactorizar selectTagInLine
+  ☐ Extraer toda la logica del tratamiento de tags a un servicio
+  
 Añadir tags mediante shortcuts:
   ✔ Detectar si el tag ya existe en dicha linea y devolver su posición en dicha linea. @done(18-10-01 15:25)
-  ☐ Borrar tag si ya existe
-  ☐ Crear tag con la hora actual si no existe
+  ✔ Borrar tag si ya existe @done(18-10-02 12:06)
+  ✔ Crear tag con la hora actual si no existe @done(18-10-02 12:06)
 
 Bugs:
-  ☐ No deberia enviar el evento textupdate al estado mientras tenemos alt presionado
+  ✔ No deberia enviar el evento textupdate al estado mientras tenemos alt presionado @done(18-10-02 09:13)

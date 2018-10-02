@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { TodoItem, TodoItemTypeEnum, TagTypeEnum } from '../shared/TodosModel';
 import { TodosState } from '../shared/TodosState';
 import { TODOITEM_SHORTCUTS } from '../constants/shortcuts';
+import { regexes } from '../regex';
 
 @Component({
   selector: 'app-text-editor',
@@ -25,23 +26,13 @@ export class TextEditorComponent implements OnInit {
     const target: HTMLTextAreaElement = event.target as HTMLTextAreaElement;
     this.dispatchUpdate(target.value);
   }
-  getLineEndPosition(caretPosition: number, text: string): number {
-    const nextLinebreakPosition = text.substr(caretPosition, text.length).indexOf('\n');
-    return  nextLinebreakPosition !== -1 ? caretPosition + nextLinebreakPosition : text.length;
-  }
 
-  selectTagInLine(line: string, tag: string): {startPosition: number, endPosition: number } {
-    const startPosition = line.indexOf(tag);
-    const currentTag = line.substr(startPosition + 1).split('@')[0];
-    const tagHasDate = (x: string) => x.indexOf(')') !== -1;
-    const endPosition = tagHasDate(currentTag) ? startPosition + 1 + currentTag.indexOf(')') : tag.length;
-
-    return startPosition === -1 ? null : { startPosition, endPosition};
-  }
   onShortcut(event: KeyboardEvent ) {
     const target: HTMLTextAreaElement = event.target as HTMLTextAreaElement;
     const currentText: string = target.value;
     const caretPosition: number = target.selectionStart;
+
+    console.log (target.selectionStart);
 
     if (event.altKey || event.code === 'Tab') {
       event.preventDefault();
@@ -49,14 +40,15 @@ export class TextEditorComponent implements OnInit {
 
     TODOITEM_SHORTCUTS.forEach(x => {
       if (event.key === x.key) {
-        const lineEndPosition = this.getLineEndPosition(caretPosition, currentText);
         switch (x.action) {
           case TagTypeEnum.Done:
-            target.value = target.value.slice(0, lineEndPosition) + ' @done' + target.value.slice(lineEndPosition);
+            this.toogleTag(target.value, '@done', target.selectionStart, target, undefined);
             break;
           case TagTypeEnum.Start:
+            this.toogleTag(target.value, '@started', target.selectionStart, target, undefined);
             break;
           case TagTypeEnum.Cancel:
+            this.toogleTag(target.value, '@cancelled', target.selectionStart, target, undefined);
             break;
         }
         target.selectionStart = caretPosition;
@@ -65,7 +57,68 @@ export class TextEditorComponent implements OnInit {
       }
     });
   }
+
   dispatchUpdate(payload: string) {
     this.state.dispatch(new UpdateText(payload));
+  }
+
+  getLineNumber(caretPosition: number, originalText): number {
+    return originalText.substr(0, caretPosition).split('\n').length;
+  }
+
+  getLineText (caretPosition: number, originalText): string {
+    return originalText.split('\n')[this.getLineNumber(caretPosition, originalText) - 1];
+  }
+
+  getLineEndPosition(caretPosition: number, originalText: string): number {
+    const nextLinebreakPosition = originalText.substr(caretPosition, originalText.length).indexOf('\n');
+    return  nextLinebreakPosition !== -1 ? caretPosition + nextLinebreakPosition : originalText.length;
+  }
+  getLineStartPosition(caretPosition: number, originalText: string): number {
+    const linesTransform = originalText.replace('\n', ' \n');
+    const originalLines = linesTransform.split('\n');
+    const currentLine = this.getLineNumber(caretPosition, originalText);
+
+    return  originalLines.slice(0, currentLine - 1).join('0').length;
+  }
+
+  findTagInLine(lineText: string, tag: string): string {
+    try {
+      return lineText.match(regexes.tag).find(x => x.includes(tag));
+    } catch {
+      return undefined;
+    }
+  }
+
+  addTagToLine(
+    originalText: string,
+    tag: string,
+    details: string = new Date(Date.now()).toLocaleString(),
+    caretPosition: number): string {
+      const lineEndPosition = this.getLineEndPosition(caretPosition, originalText);
+      return `${originalText.slice(0, lineEndPosition)} ${tag}(${details})${originalText.slice(lineEndPosition)}`;
+  }
+
+  deleteTagFromLine(originalText: string, tag: string, caretPosition: number): string {
+    const lineText = this.getLineText(caretPosition, originalText);
+    const lineStart = this.getLineStartPosition(caretPosition, originalText);
+    const tagInLine = this.findTagInLine(lineText, tag);
+
+    if (tagInLine !== undefined ) {
+      const tagStartPosition = lineStart + lineText.indexOf(tagInLine);
+      const tagEndPosition = tagStartPosition + tagInLine.length;
+      return originalText.substring(0, tagStartPosition) + originalText.substring(tagEndPosition);
+    } else {
+      return originalText;
+    }
+  }
+
+  toogleTag(originalText: string, tag: string, caretPosition: number, el: HTMLTextAreaElement, details) {
+    const lineText = this.getLineText(caretPosition, originalText);
+    if (this.findTagInLine(lineText, tag) !== undefined) {
+      el.value = this.deleteTagFromLine(originalText, tag, caretPosition);
+    } else {
+      el.value = this.addTagToLine(originalText, tag, details, caretPosition);
+    }
   }
 }
