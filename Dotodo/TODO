@@ -90,7 +90,7 @@ Main Roadmap:
     ✔ Crear Expresión regular para detectar el objeto date en los tags. @done(18-10-02 12:37)
 
 Text-Editor-Component:
-  ☐ Extraer toda la logica del tratamiento de tags a un servicio
+  ✔ Extraer toda la logica del tratamiento de tags a un servicio @done(18-10-02 18:19)
   ✔ Extraer toda la logica de la validación en un servicio @done(18-10-02 16:43)
   ☐ Extrer Date extension method a cualquier lado donde vaya que aun no se cual es
   
