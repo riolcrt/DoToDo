@@ -16,7 +16,14 @@ import { ShortcutValidationService } from '../shortcut-validation.service';
 export class TextEditorComponent implements OnInit {
   public todoType: typeof TodoItemTypeEnum = TodoItemTypeEnum;
   public todos$: Observable<TodoItem[]> = this.state.select(TodosState.GetTodoItems);
-  constructor (private state: Store, private validationService: ShortcutValidationService, private el: ElementRef) {}
+  constructor (private state: Store, private validationService: ShortcutValidationService, private el: ElementRef) {
+    Object.assign(Date.prototype, {
+      toLocaleIsoString() {
+        const tzOffset = (new Date()).getTimezoneOffset() * 60000;
+        return (new Date(Date.now() - tzOffset)).toISOString().slice(0, -1);
+      }
+    });
+  }
 
   ngOnInit() {
     const textArea: HTMLTextAreaElement = this.el.nativeElement.querySelector('textarea');
@@ -34,16 +41,17 @@ export class TextEditorComponent implements OnInit {
 
 
     if (event.altKey || event.code === 'Tab') {
-      event.preventDefault();
-    }
-
-    TODOITEM_SHORTCUTS.forEach(x => {
-      if (event.key === x.key) {
-        this.updateTextAreaOnShortcut(target.value, x.tagType, caretPosition, target);
-        target.selectionStart = caretPosition;
-        target.selectionEnd = caretPosition;
+      if (TODOITEM_SHORTCUTS.some( x => x.key === event.key ))  {
+        event.preventDefault();
       }
-    });
+      TODOITEM_SHORTCUTS.forEach(x => {
+        if (event.key === x.key) {
+          this.updateTextAreaOnShortcut(target.value, x.tagType, caretPosition, target);
+          target.selectionStart = caretPosition;
+          target.selectionEnd = caretPosition;
+        }
+      });
+    }
   }
 
   dispatchUpdate(payload: string) {
@@ -108,8 +116,6 @@ export class TextEditorComponent implements OnInit {
     } else {
       el.value = this.addTagToLine(originalText, tag.toString(), details, caretPosition);
     }
-
-    this.dispatchUpdate(el.value);
   }
 
   updateTextAreaOnShortcut(originalText: string, tag: TagTypeEnum, caretPosition: number, el: HTMLTextAreaElement): void {
@@ -121,6 +127,21 @@ export class TextEditorComponent implements OnInit {
       return;
     }
 
-    this.toogleTag(originalText, toDoText, tag, caretPosition, el, new Date(Date.now()).toLocaleString());
+    // Side Effects
+    switch (tag) {
+      case TagTypeEnum.Started: {
+        const isStarted = toDoText.match(regexes.tagStarted);
+        if ( isStarted !== null) {
+          const startDate = isStarted.find( x => x.includes('started')).match(regexes.isoTime)[0];
+          console.log (startDate);
+        }
+      }
+
+    }
+
+    this.toogleTag(originalText, toDoText, tag, caretPosition, el, new Date(Date.now()).toLocaleIsoString());
+    this.dispatchUpdate(el.value);
   }
+
+  
 }

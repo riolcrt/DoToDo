@@ -92,6 +92,7 @@ Main Roadmap:
 Text-Editor-Component:
   ☐ Extraer toda la logica del tratamiento de tags a un servicio
   ✔ Extraer toda la logica de la validación en un servicio @done(18-10-02 16:43)
+  ☐ Extrer Date extension method a cualquier lado donde vaya que aun no se cual es
   
 Añadir tags mediante shortcuts:
   ✔ Detectar si el tag ya existe en dicha linea y devolver su posición en dicha linea. @done(18-10-01 15:25)
@@ -109,3 +110,5 @@ Shortcuts Side Effects:
 
 Bugs:
   ✔ No deberia enviar el evento textupdate al estado mientras tenemos alt presionado @done(18-10-02 09:13)
+  ✔ Ctr+C jumps as shortcut and is not one @done(18-10-02 18:04)
+  ✔ Me está cogiendo atajos de teclado simplemente por escribir sin necesidad de alt. @done(18-10-02 18:04)
