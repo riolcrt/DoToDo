@@ -69,4 +69,8 @@ export class TextAreaParseService {
     }
   }
 
+  extractDateFromTag(tag, tagName): Date {
+    return new Date (tag.find( x => x.includes(tagName)).match(regexes.isoTime)[0]);
+  }
+
 }

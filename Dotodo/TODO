@@ -105,7 +105,7 @@ Validacion de shortcuts:
   ✔ Una tarea finished o cancelada no puede ser empezada. @done(18-10-02 16:55)
   ✔ El tag started no puede ser eliminado de tareas completadas. @done(18-10-02 16:56)
 Shortcuts Side Effects:
-  ☐ Cuando una tarea se termina o cancela y estaba comenzada en los detalles se añade el timespan transcurrido desde que empezó hasta que terminó. La etiqueta started se cambia por ellapsed
+  ☐ Cuando una tarea se termina o cancela y estaba comenzada en los detalles se añade el timespan transcurrido desde que empezó hasta que terminó. La etiqueta started se cambia por lasted en caso de done o wasted en caso de canceled
 
 Bugs:
   ✔ No deberia enviar el evento textupdate al estado mientras tenemos alt presionado @done(18-10-02 09:13)

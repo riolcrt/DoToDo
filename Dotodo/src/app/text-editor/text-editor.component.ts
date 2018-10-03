@@ -62,34 +62,50 @@ export class TextEditorComponent implements OnInit {
   updateTextAreaOnShortcut(tag: TagTypeEnum, el: HTMLTextAreaElement): void {
     const caretPosition = el.selectionStart;
     const originalText = el.value;
-    let now = new Date(Date.now());
+    let tagDate = new Date(Date.now());
     const toDoText = this.textAreaService.getLineText(caretPosition, originalText);
 
     // Validation
     if (!this.validationService.validateShortcut(toDoText, tag)) {
       return;
     }
+    const isTagStarted = toDoText.match(regexes.tagStarted);
+    const isTagLasted = toDoText.match(regexes.tagElapsed);
 
     // Side Effects
     switch (tag) {
-      case TagTypeEnum.Started: {
-        const isStarted = toDoText.match(regexes.tagStarted);
-        const isLasted = toDoText.match(regexes.tagElapsed);
-        if ( isStarted ) {
-          const startDate = new Date (isStarted.find( x => x.includes('started')).match(regexes.isoTime)[0]);
-          const timeElapsed = now.getTime() - startDate.getTime();
+      case TagTypeEnum.Started:
+        if ( isTagStarted ) {
+          const startDate = this.textAreaService.extractDateFromTag(isTagStarted, 'started');
+          const timeElapsed = tagDate.getTime() - startDate.getTime();
           const timeElapsedString = this.dateService.timeEllapsedToString(timeElapsed);
           this.textAreaService.toogleTag(toDoText, TagTypeEnum.Lasted, caretPosition, el, timeElapsedString);
         }
-        if (isLasted ) {
-          const lastedTimeInMilliseconds = this.dateService.stringTimeEllapsedToMilliseconds(isLasted[0].match(regexes.tagDetails)[1]);
-          now = new Date(Date.now() - lastedTimeInMilliseconds);
-          this.textAreaService.toogleTag(toDoText, TagTypeEnum.Lasted, caretPosition, el, isLasted);
+        if ( isTagLasted ) {
+          const lastedTimeInMilliseconds = this.dateService.stringTimeEllapsedToMilliseconds(isTagLasted[0].match(regexes.tagDetails)[1]);
+          tagDate = new Date(Date.now() - lastedTimeInMilliseconds);
+          this.textAreaService.toogleTag(toDoText, TagTypeEnum.Lasted, caretPosition, el, isTagLasted);
         }
-      }
+        break;
+      case TagTypeEnum.Done:
+        if ( isTagStarted ) {
+          const startDate = this.textAreaService.extractDateFromTag(isTagStarted, 'started');
+          const timeElapsed = tagDate.getTime() - startDate.getTime();
+          const timeElapsedString = this.dateService.timeEllapsedToString(timeElapsed);
+          this.textAreaService.toogleTag(toDoText, TagTypeEnum.Lasted, caretPosition, el, timeElapsedString);
+        }
+        break;
+      case TagTypeEnum.Cancelled:
+        if ( isTagStarted ) {
+          const startDate = this.textAreaService.extractDateFromTag(isTagStarted, 'started');
+          const timeElapsed = tagDate.getTime() - startDate.getTime();
+          const timeElapsedString = this.dateService.timeEllapsedToString(timeElapsed);
+          this.textAreaService.toogleTag(toDoText, TagTypeEnum.Wasted, caretPosition, el, timeElapsedString);
+        }
+        break;
     }
 
-    this.textAreaService.toogleTag(toDoText, tag, caretPosition, el, this.dateService.toLocaleIsoString(now));
+    this.textAreaService.toogleTag(toDoText, tag, caretPosition, el, this.dateService.toLocaleIsoString(tagDate));
     this.dispatchUpdate(el.value);
   }
 }
