@@ -18,5 +18,7 @@ export const regexes =  {
 
     tagEstimate: /(?:^|[^a-zA-Z0-9])@est\(([^)]*)\)|@(\d\S+)/,
 
-    isoTime: /(\d){4}-(\d){2}-(\d){2}T(\d){2}:(\d){2}:(\d){2}.(\d){3}/g
+    isoTime: /(\d){4}-(\d){2}-(\d){2}T(\d){2}:(\d){2}:(\d){2}.(\d){3}/g,
+    ellapsedString : /(\d+)d|(\d+)h|(\d+)m|(\d+)s/g,
+    tagDetails: /\(([^\)]+)\)/
 };
