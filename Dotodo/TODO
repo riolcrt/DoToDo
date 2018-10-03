@@ -72,7 +72,7 @@ Main Roadmap:
     ✔ Generar el ngfor para dibujar los todos en el texteditor @done(18-09-28 11:48)
     ✔ Matchear la posición de los todos y del textarea @done(18-09-28 11:54)
 
-  ☐ Mandar un UpdateText al comenzar por si hay texto en el text-box
+  ✔ Mandar un UpdateText al comenzar por si hay texto en el text-box @done(18-10-02 18:20)
   
   ☐ Investigar el doble espacio de white-space: pre-wrap
     Cuando le meto a las ToDos la regla white-space: pre-wrap
@@ -106,7 +106,6 @@ Validacion de shortcuts:
   ✔ El tag started no puede ser eliminado de tareas completadas. @done(18-10-02 16:56)
 Shortcuts Side Effects:
   ☐ Cuando una tarea se termina o cancela y estaba comenzada en los detalles se añade el timespan transcurrido desde que empezó hasta que terminó. La etiqueta started se cambia por ellapsed
-  ☐ Si una tarea tiene el tag started y se le elimina, se crea el tag ellapsed con el tiempo que estuvo activa.
 
 Bugs:
   ✔ No deberia enviar el evento textupdate al estado mientras tenemos alt presionado @done(18-10-02 09:13)

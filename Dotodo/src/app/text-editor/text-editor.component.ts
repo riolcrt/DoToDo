@@ -8,6 +8,7 @@ import { TODOITEM_SHORTCUTS } from '../constants/shortcuts';
 import { regexes } from '../regex';
 import { ShortcutValidationService } from '../shortcut-validation.service';
 import { TextAreaParseService } from '../text-area-parse.service';
+import { DateService } from '../date.service';
 
 @Component({
   selector: 'app-text-editor',
@@ -21,14 +22,9 @@ export class TextEditorComponent implements OnInit {
     private state: Store,
     private validationService: ShortcutValidationService,
     private textAreaService: TextAreaParseService,
-    private el: ElementRef) {
-      Object.assign(Date.prototype, {
-        toLocaleIsoString() {
-          const tzOffset = (new Date()).getTimezoneOffset() * 60000;
-          return (new Date(Date.now() - tzOffset)).toISOString().slice(0, -1);
-        }
-      });
-  }
+    private dateService: DateService,
+    private el: ElementRef
+    ) {}
 
   ngOnInit() {
     const textArea: HTMLTextAreaElement = this.el.nativeElement.querySelector('textarea');
@@ -51,7 +47,7 @@ export class TextEditorComponent implements OnInit {
       }
       TODOITEM_SHORTCUTS.forEach(x => {
         if (event.key === x.key) {
-          this.updateTextAreaOnShortcut(target.value, x.tagType, caretPosition, target);
+          this.updateTextAreaOnShortcut(x.tagType, target);
           target.selectionStart = caretPosition;
           target.selectionEnd = caretPosition;
         }
@@ -63,8 +59,10 @@ export class TextEditorComponent implements OnInit {
     this.state.dispatch(new UpdateText(payload));
   }
 
-  updateTextAreaOnShortcut(originalText: string, tag: TagTypeEnum, caretPosition: number, el: HTMLTextAreaElement): void {
-    // ToDo Text.
+  updateTextAreaOnShortcut(tag: TagTypeEnum, el: HTMLTextAreaElement): void {
+    const caretPosition = el.selectionStart;
+    const originalText = el.value;
+    let now = new Date(Date.now());
     const toDoText = this.textAreaService.getLineText(caretPosition, originalText);
 
     // Validation
@@ -76,15 +74,22 @@ export class TextEditorComponent implements OnInit {
     switch (tag) {
       case TagTypeEnum.Started: {
         const isStarted = toDoText.match(regexes.tagStarted);
-        if ( isStarted !== null) {
-          const startDate = isStarted.find( x => x.includes('started')).match(regexes.isoTime)[0];
-          console.log (startDate);
+        const isLasted = toDoText.match(regexes.tagElapsed);
+        if ( isStarted ) {
+          const startDate = new Date (isStarted.find( x => x.includes('started')).match(regexes.isoTime)[0]);
+          const timeElapsed = now.getTime() - startDate.getTime();
+          const timeElapsedString = this.dateService.timeEllapsedToString(timeElapsed);
+          this.textAreaService.toogleTag(toDoText, TagTypeEnum.Lasted, caretPosition, el, timeElapsedString);
+        }
+        if (isLasted ) {
+          const lastedTimeInMilliseconds = this.dateService.stringTimeEllapsedToMilliseconds(isLasted[0].match(regexes.tagDetails)[1]);
+          now = new Date(Date.now() - lastedTimeInMilliseconds);
+          this.textAreaService.toogleTag(toDoText, TagTypeEnum.Lasted, caretPosition, el, isLasted);
         }
       }
-
     }
 
-    this.textAreaService.toogleTag(originalText, toDoText, tag, caretPosition, el, new Date(Date.now()).toLocaleIsoString());
+    this.textAreaService.toogleTag(toDoText, tag, caretPosition, el, this.dateService.toLocaleIsoString(now));
     this.dispatchUpdate(el.value);
   }
 }

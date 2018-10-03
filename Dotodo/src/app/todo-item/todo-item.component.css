@@ -30,3 +30,7 @@ p {
 :host.group {
     color: aqua;
 }
+
+:host.tagElapsed {
+    color: #b9ab82;
+}

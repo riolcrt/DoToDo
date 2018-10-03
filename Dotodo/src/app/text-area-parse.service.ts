@@ -60,12 +60,13 @@ export class TextAreaParseService {
     }
   }
 
-  toogleTag(originalText: string, toDoText: string, tag: TagTypeEnum, caretPosition: number, el: HTMLTextAreaElement, details) {
-    // Toggle
+  toogleTag(toDoText: string, tag: TagTypeEnum, caretPosition: number, el: HTMLTextAreaElement, details) {
+    const originalText = el.value;
     if (this.findTagInLine(toDoText, tag.toString()) !== undefined) {
       el.value = this.deleteTagFromLine(originalText, tag.toString(), caretPosition);
     } else {
       el.value = this.addTagToLine(originalText, tag.toString(), details, caretPosition);
     }
   }
+
 }

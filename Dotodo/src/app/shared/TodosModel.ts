@@ -4,8 +4,14 @@ export interface TodosStateModel {
 
 }
 
-export enum TodoItemTypeEnum { Annotation, Group, Todo, TodoCanceled, TodoDone }
-export enum TagTypeEnum {  Started = '@started', Cancelled = '@cancelled', Done = '@done'  }
+export enum TodoItemTypeEnum { Annotation, Group, Todo, TodoCanceled, TodoDone, TodoEllapsed }
+export enum TagTypeEnum {
+    Started = '@started',
+    Cancelled = '@cancelled',
+    Done = '@done',
+    Lasted = '@lasted',
+    Wasted = '@wasted'
+}
 
 export enum ShortcutValidationErrorEnum {
     only_task_can_have_tags,

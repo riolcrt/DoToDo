@@ -62,7 +62,7 @@ describe('TextAreaParseService', () => {
 
   }));
 
-  it ('should add the tag text with details to text in current line', 
+  it ('should add the tag text with details to text in current line',
   inject([TextAreaParseService], (service: TextAreaParseService) => {
     const details = 'ellapsed 1h';
 
@@ -80,7 +80,7 @@ describe('TextAreaParseService', () => {
 
   }));
 
-  it ('should return the original text if you try to delete a non existing tag in line', 
+  it ('should return the original text if you try to delete a non existing tag in line',
   inject([TextAreaParseService], (service: TextAreaParseService) => {
     const originalText = 'This is the original text with no tag';
     expect(service.deleteTagFromLine(originalText, '@done', 0)).toBe(originalText);
