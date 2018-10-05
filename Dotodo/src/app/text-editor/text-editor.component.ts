@@ -40,10 +40,13 @@ export class TextEditorComponent implements OnInit {
   }
 
   replaceToDoCharacters () {
+    this.caretPosition = this.textAreaElement.selectionStart;
     this.textAreaElement.value = this.textAreaElement.value.replace(/(^- )/gm, '☐ ');
     this.textAreaElement.value = this.textAreaElement.value.replace(/(✔ |✘ )/gm, '☐ ');
     this.textAreaElement.value = this.textAreaElement.value.replace(/(☐ |✘ )(?=.+@done)/gm, '✔ ');
     this.textAreaElement.value = this.textAreaElement.value.replace(/(☐ |✔ )(?=.+@cancelled)/gm, '✘ ');
+    this.textAreaElement.selectionStart = this.caretPosition;
+    this.textAreaElement.selectionEnd = this.caretPosition;
   }
   onShortcut(event: KeyboardEvent ) {
     this.caretPosition = this.textAreaElement.selectionStart;

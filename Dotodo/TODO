@@ -78,6 +78,8 @@ Text-Editor-Component:
   ✔ Extraer toda la logica de la validación en un servicio @done(18-10-02 16:43)
   ✔ Extrer Date extension method a cualquier lado donde vaya que aun no se cual es @done(18-10-03 14:36)
   ☐ When Key enter is pressed and a new todo item is generated, it had to be at the same indentation level that his closed up sibiling
+  ☐ Parse all dates and convert it to our date format
+
   Añadir tags mediante shortcuts:
     ✔ Detectar si el tag ya existe en dicha linea y devolver su posición en dicha linea. @done(18-10-01 15:25)
     ✔ Borrar tag si ya existe @done(18-10-02 12:06)
