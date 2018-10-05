@@ -56,7 +56,7 @@ export class TextEditorComponent implements OnInit {
     }
     TODOITEM_SHORTCUTS.forEach(x => {
       if (pressedAlso === x.key) {
-        this.updateTextAreaOnShortcut(x.tagType);
+        this.updateTextAreaOnShortcut(x.tagType, this.textAreaService.getLineText(this.caretPosition, this.textAreaElement.value));
       }
     });
     this.textAreaElement.selectionStart = lineStartPosition;
@@ -81,9 +81,7 @@ export class TextEditorComponent implements OnInit {
   }
 
 
-  updateTextAreaOnShortcut(tagType: TagTypeEnum): void {
-    const toDoText = this.textAreaService.getLineText(this.caretPosition, this.textAreaElement.value);
-
+  updateTextAreaOnShortcut(tagType: TagTypeEnum, toDoText: string): void {
     // Validation
     if (!this.validationService.validateShortcut(toDoText, tagType)) {
       return;
@@ -101,7 +99,7 @@ export class TextEditorComponent implements OnInit {
         this.toogleDoneTag(startedTag);
         break;
       case TagTypeEnum.Cancelled:
-        this.toggleCancelTag(startedTag, lastedTag, wastedTag);
+        this.toggleCancelTag(startedTag);
         break;
     }
   }
@@ -135,7 +133,7 @@ export class TextEditorComponent implements OnInit {
     }
   }
 
-  toggleCancelTag(startedTag: RegExpMatchArray, lastedTag: RegExpMatchArray, wastedTag: RegExpMatchArray) {
+  toggleCancelTag(startedTag: RegExpMatchArray) {
     if ( startedTag ) {
       const startDate = this.textAreaService.extractDateFromTag(startedTag, 'started');
       const timeElapsed = new Date(Date.now()).getTime() - startDate.getTime();
@@ -143,12 +141,6 @@ export class TextEditorComponent implements OnInit {
       this.removeTag(TagTypeEnum.Started);
       this.addTag(TagTypeEnum.Wasted, timeElapsedString);
     }
-
-    if ( lastedTag ) {
-      console.log (this.textAreaService.extractElapsedTimeFromTag(lastedTag[0]));
-    }
-
-
 
     const timeString = this.dateService.toLocaleIsoString(new Date(Date.now()));
     this.toogleTag(TagTypeEnum.Cancelled, timeString );
