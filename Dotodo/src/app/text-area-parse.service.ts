@@ -82,7 +82,6 @@ export class TextAreaParseService {
     const lineStart = this.getLineStartPosition(caretPosition, textAreaHtmlElement.value);
     const prevText = textAreaHtmlElement.value.substring(0, lineStart);
     const nextText = textAreaHtmlElement.value.substring(lineStart + this.tabulation.length);
-    console.log ();
     if (lineText.search(/\S/) >= this.tabulation.length) {
       textAreaHtmlElement.value = `${prevText}${nextText}`;
     }

@@ -58,6 +58,9 @@ export class TextEditorComponent implements OnInit {
         this.updateTextAreaOnShortcut(x.tagType);
       }
     });
+    this.textAreaElement.selectionStart = this.caretPosition;
+    this.textAreaElement.selectionEnd = this.caretPosition;
+
   }
 
   onTabKey(isShiftKey) {
@@ -68,32 +71,16 @@ export class TextEditorComponent implements OnInit {
       this.textAreaService.addTabulation(this.caretPosition, this.textAreaElement);
     }
     this.dispatchUpdate(this.textAreaElement.value);
-  }
-
-  dispatchUpdate(payload: string) {
-    this.state.dispatch(new UpdateText(payload));
     this.textAreaElement.selectionStart = this.caretPosition;
     this.textAreaElement.selectionEnd = this.caretPosition;
   }
 
-  addLastedTagFromNotFinishedStartedTag(tagDate, tagStartedMatch) {
-    const startDate = this.textAreaService.extractDateFromTag(tagStartedMatch, 'started');
-    const timeElapsed = tagDate.getTime() - startDate.getTime();
-    const timeElapsedString = this.dateService.timeEllapsedToString(timeElapsed);
-    this.textAreaService.toogleTag(TagTypeEnum.Lasted, timeElapsedString, this.caretPosition, this.textAreaElement);
+  dispatchUpdate(payload: string) {
+    this.state.dispatch(new UpdateText(payload));
   }
 
-  removeLastedTag(tagLastedMatch) {
-    this.textAreaService.toogleTag(TagTypeEnum.Lasted, tagLastedMatch, this.caretPosition, this.textAreaElement);
-  }
-
-  updateTimeOffset(tagLastedMatch) {
-    const lastedTimeInMilliseconds = this.dateService.stringTimeEllapsedToMilliseconds(tagLastedMatch[0].match(regexes.tagDetails)[1]);
-    return - lastedTimeInMilliseconds;
-  }
 
   updateTextAreaOnShortcut(tagType: TagTypeEnum): void {
-    let timeOffset = 0;
     const toDoText = this.textAreaService.getLineText(this.caretPosition, this.textAreaElement.value);
 
     // Validation
@@ -106,21 +93,10 @@ export class TextEditorComponent implements OnInit {
     // Side Effects
     switch (tagType) {
       case TagTypeEnum.Started:
-        if ( startedTag ) {
-          this.addLastedTagFromNotFinishedStartedTag(new Date(Date.now()), startedTag);
-        }
-        if ( lastedTag ) {
-          timeOffset = this.updateTimeOffset (lastedTag);
-          this.removeLastedTag( lastedTag );
-        }
+        this.toggleStartTag(startedTag, lastedTag);
         break;
       case TagTypeEnum.Done:
-        if ( startedTag ) {
-          const startDate = this.textAreaService.extractDateFromTag(startedTag, 'started');
-          const timeElapsed = new Date(Date.now()).getTime() - startDate.getTime();
-          const timeElapsedString = this.dateService.timeEllapsedToString(timeElapsed);
-          this.textAreaService.toogleTag(TagTypeEnum.Lasted, timeElapsedString, this.caretPosition, this.textAreaElement);
-        }
+        this.toogleDoneTask(startedTag);
         break;
       case TagTypeEnum.Cancelled:
         if ( startedTag ) {
@@ -131,8 +107,44 @@ export class TextEditorComponent implements OnInit {
         }
         break;
     }
-    const timeString = this.dateService.toLocaleIsoString(new Date(Date.now() + timeOffset));
+  }
+
+  toogleDoneTask(startedTag) {
+    if ( startedTag ) {
+      const startDate = this.textAreaService.extractDateFromTag(startedTag, 'started');
+      const timeElapsed = new Date(Date.now()).getTime() - startDate.getTime();
+      const timeElapsedString = this.dateService.timeEllapsedToString(timeElapsed);
+      this.textAreaService.toogleTag(TagTypeEnum.Lasted, timeElapsedString, this.caretPosition, this.textAreaElement);
+    }
+    const timeString = this.dateService.toLocaleIsoString(new Date(Date.now()));
+    this.toogleTag(TagTypeEnum.Done, timeString);
+  }
+
+  toggleStartTag(startedTag: RegExpMatchArray, lastedTag: RegExpMatchArray) {
+    let timeOffset = 0;
+    if ( startedTag ) {
+      this.addLastedTagFromNotFinishedStartedTag(new Date(Date.now()), startedTag);
+      const timeString = this.dateService.toLocaleIsoString(new Date(Date.now()));
+      this.toogleTag(TagTypeEnum.Started, timeString);
+    }
+    if ( lastedTag ) {
+      timeOffset = - this.dateService.stringTimeEllapsedToMilliseconds(lastedTag[0].match(regexes.tagDetails)[1]);
+      const timeString = this.dateService.toLocaleIsoString(new Date(Date.now() + timeOffset));
+      this.toogleTag(TagTypeEnum.Started, timeString);
+      this.toogleTag(TagTypeEnum.Lasted, 'nothing');
+    }
+  }
+
+  addLastedTagFromNotFinishedStartedTag(tagDate, tagStartedMatch) {
+    const startDate = this.textAreaService.extractDateFromTag(tagStartedMatch, 'started');
+    const timeElapsed = tagDate.getTime() - startDate.getTime();
+    const timeElapsedString = this.dateService.timeEllapsedToString(timeElapsed);
+    this.textAreaService.toogleTag(TagTypeEnum.Lasted, timeElapsedString, this.caretPosition, this.textAreaElement);
+  }
+
+  toogleTag(tagType: TagTypeEnum, timeString: string) {
     this.textAreaService.toogleTag(tagType, timeString, this.caretPosition, this.textAreaElement);
     this.dispatchUpdate(this.textAreaElement.value);
   }
+
 }
