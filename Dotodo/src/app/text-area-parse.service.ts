@@ -70,6 +70,15 @@ export class TextAreaParseService {
     }
   }
 
+  addTag(tagType: TagTypeEnum, tagTime: string, caretPosition: number, textAreaHtmlElement: HTMLTextAreaElement) {
+    textAreaHtmlElement.value = this.addTagToLine(textAreaHtmlElement.value, tagType.toString(), tagTime, caretPosition);
+  }
+
+  removeTag(tagType: TagTypeEnum, caretPosition: number, textAreaHtmlElement: HTMLTextAreaElement) {
+    textAreaHtmlElement.value = this.deleteTagFromLine(textAreaHtmlElement.value, tagType.toString(), caretPosition);
+  }
+
+
   addTabulation(caretPosition: number, textAreaHtmlElement: HTMLTextAreaElement) {
     const lineStart = this.getLineStartPosition(caretPosition, textAreaHtmlElement.value);
     const prevText = textAreaHtmlElement.value.substring(0, lineStart);
@@ -89,6 +98,10 @@ export class TextAreaParseService {
 
   extractDateFromTag(tag, tagName): Date {
     return new Date (tag.find( x => x.includes(tagName)).match(regexes.isoTime)[0]);
+  }
+
+  extractElapsedTimeFromTag(tag): String {
+    return tag.match(regexes.ellapsedString);
   }
 
 }

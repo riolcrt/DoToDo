@@ -31,6 +31,6 @@ p {
     color: aqua;
 }
 
-:host.tagElapsed {
+:host.tagLasted {
     color: #b9ab82;
 }

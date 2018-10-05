@@ -50,6 +50,7 @@ export class TextEditorComponent implements OnInit {
   }
 
   onAltKey(pressedAlso) {
+    const lineStartPosition = this.textAreaService.getLineStartPosition(this.caretPosition, this.textAreaElement.value);
     if (TODOITEM_SHORTCUTS.some( x => x.key === pressedAlso ))  {
       event.preventDefault();
     }
@@ -58,8 +59,8 @@ export class TextEditorComponent implements OnInit {
         this.updateTextAreaOnShortcut(x.tagType);
       }
     });
-    this.textAreaElement.selectionStart = this.caretPosition;
-    this.textAreaElement.selectionEnd = this.caretPosition;
+    this.textAreaElement.selectionStart = lineStartPosition;
+    this.textAreaElement.selectionEnd = lineStartPosition;
 
   }
 
@@ -88,28 +89,24 @@ export class TextEditorComponent implements OnInit {
       return;
     }
     const startedTag = toDoText.match(regexes.tagStarted);
-    const lastedTag = toDoText.match(regexes.tagElapsed);
+    const lastedTag = toDoText.match(regexes.tagLasted);
+    const wastedTag = toDoText.match(regexes.tagWasted);
 
     // Side Effects
     switch (tagType) {
       case TagTypeEnum.Started:
-        this.toggleStartTag(startedTag, lastedTag);
+        this.toggleStartTag(startedTag, lastedTag, wastedTag);
         break;
       case TagTypeEnum.Done:
-        this.toogleDoneTask(startedTag);
+        this.toogleDoneTag(startedTag);
         break;
       case TagTypeEnum.Cancelled:
-        if ( startedTag ) {
-          const startDate = this.textAreaService.extractDateFromTag(startedTag, 'started');
-          const timeElapsed = new Date(Date.now()).getTime() - startDate.getTime();
-          const timeElapsedString = this.dateService.timeEllapsedToString(timeElapsed);
-          this.textAreaService.toogleTag(TagTypeEnum.Wasted, timeElapsedString, this.caretPosition, this.textAreaElement);
-        }
+        this.toggleCancelTag(startedTag, lastedTag, wastedTag);
         break;
     }
   }
 
-  toogleDoneTask(startedTag) {
+  toogleDoneTag(startedTag) {
     if ( startedTag ) {
       const startDate = this.textAreaService.extractDateFromTag(startedTag, 'started');
       const timeElapsed = new Date(Date.now()).getTime() - startDate.getTime();
@@ -120,19 +117,41 @@ export class TextEditorComponent implements OnInit {
     this.toogleTag(TagTypeEnum.Done, timeString);
   }
 
-  toggleStartTag(startedTag: RegExpMatchArray, lastedTag: RegExpMatchArray) {
+  toggleStartTag(startedTag: RegExpMatchArray, lastedTag: RegExpMatchArray, wastedTag: RegExpMatchArray) {
     let timeOffset = 0;
     if ( startedTag ) {
       this.addLastedTagFromNotFinishedStartedTag(new Date(Date.now()), startedTag);
-      const timeString = this.dateService.toLocaleIsoString(new Date(Date.now()));
-      this.toogleTag(TagTypeEnum.Started, timeString);
-    }
-    if ( lastedTag ) {
+      this.removeTag(TagTypeEnum.Started);
+    } else if ( lastedTag ) {
       timeOffset = - this.dateService.stringTimeEllapsedToMilliseconds(lastedTag[0].match(regexes.tagDetails)[1]);
-      const timeString = this.dateService.toLocaleIsoString(new Date(Date.now() + timeOffset));
-      this.toogleTag(TagTypeEnum.Started, timeString);
-      this.toogleTag(TagTypeEnum.Lasted, 'nothing');
+      this.addTag(TagTypeEnum.Started, this.dateService.toLocaleIsoString(new Date(Date.now() + timeOffset)));
+      this.removeTag(TagTypeEnum.Lasted);
+    } else if ( wastedTag ) {
+      timeOffset = - this.dateService.stringTimeEllapsedToMilliseconds(wastedTag[0].match(regexes.tagDetails)[1]);
+      this.addTag(TagTypeEnum.Started, this.dateService.toLocaleIsoString(new Date(Date.now() + timeOffset)));
+      this.removeTag(TagTypeEnum.Wasted);
+    } else {
+      this.addTag(TagTypeEnum.Started, this.dateService.toLocaleIsoString(new Date(Date.now())));
     }
+  }
+
+  toggleCancelTag(startedTag: RegExpMatchArray, lastedTag: RegExpMatchArray, wastedTag: RegExpMatchArray) {
+    if ( startedTag ) {
+      const startDate = this.textAreaService.extractDateFromTag(startedTag, 'started');
+      const timeElapsed = new Date(Date.now()).getTime() - startDate.getTime();
+      const timeElapsedString = this.dateService.timeEllapsedToString(timeElapsed);
+      this.removeTag(TagTypeEnum.Started);
+      this.addTag(TagTypeEnum.Wasted, timeElapsedString);
+    }
+
+    if ( lastedTag ) {
+      console.log (this.textAreaService.extractElapsedTimeFromTag(lastedTag[0]));
+    }
+
+
+
+    const timeString = this.dateService.toLocaleIsoString(new Date(Date.now()));
+    this.toogleTag(TagTypeEnum.Cancelled, timeString );
   }
 
   addLastedTagFromNotFinishedStartedTag(tagDate, tagStartedMatch) {
@@ -147,4 +166,13 @@ export class TextEditorComponent implements OnInit {
     this.dispatchUpdate(this.textAreaElement.value);
   }
 
+  addTag (tagType, timeString: string) {
+    this.textAreaService.addTag(tagType, timeString, this.caretPosition, this.textAreaElement);
+    this.dispatchUpdate(this.textAreaElement.value);
+  }
+
+  removeTag (tagType) {
+    this.textAreaService.removeTag(tagType, this.caretPosition, this.textAreaElement);
+    this.dispatchUpdate(this.textAreaElement.value);
+  }
 }

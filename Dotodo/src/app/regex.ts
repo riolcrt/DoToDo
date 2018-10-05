@@ -14,7 +14,8 @@ export const regexes =  {
     tagDone: /(?:^|[^a-zA-Z0-9])@(?:done)(?:(?:\(([^)]*)\))|(?![a-zA-Z]))/,
     tagCancel: /(?:^|[^a-zA-Z0-9])@(?:cancelled)(?:(?:\(([^)]*)\))|(?![a-zA-Z]))/,
     tagFinished: /(?:^|[^a-zA-Z0-9])@(?:done|cancelled)(?:(?:\(([^)]*)\))|(?![a-zA-Z]))/,
-    tagElapsed: /(?:^|[^a-zA-Z0-9])@(?:lasted|wasted)(?:(?:\(([^)]*)\))|(?![a-zA-Z]))/,
+    tagLasted: /(?:^|[^a-zA-Z0-9])@(?:lasted)(?:(?:\(([^)]*)\))|(?![a-zA-Z]))/,
+    tagWasted: /(?:^|[^a-zA-Z0-9])@(?:wasted)(?:(?:\(([^)]*)\))|(?![a-zA-Z]))/,
 
     tagEstimate: /(?:^|[^a-zA-Z0-9])@est\(([^)]*)\)|@(\d\S+)/,
 
