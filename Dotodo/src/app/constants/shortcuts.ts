@@ -14,5 +14,5 @@ export const TODOITEM_SHORTCUTS = [{
     altKey: true,
     key: 'c',
     tagType: TagTypeEnum.Cancelled
-  }
+  },
 ];

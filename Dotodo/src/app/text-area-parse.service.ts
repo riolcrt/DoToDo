@@ -6,7 +6,7 @@ import { TagTypeEnum } from './shared/TodosModel';
   providedIn: 'root'
 })
 export class TextAreaParseService {
-
+  private tabulation = '    ';
   constructor() { }
 
   getLineNumber(caretPosition: number, originalText): number {
@@ -39,17 +39,17 @@ export class TextAreaParseService {
 
   addTagToLine(
     originalText: string,
-    tag: string,
+    tagName: string,
     details: string,
     caretPosition: number): string {
       const lineEndPosition = this.getLineEndPosition(caretPosition, originalText);
-      return `${originalText.slice(0, lineEndPosition)} ${tag}(${details})${originalText.slice(lineEndPosition)}`;
+      return `${originalText.slice(0, lineEndPosition)} ${tagName}(${details})${originalText.slice(lineEndPosition)}`;
   }
 
-  deleteTagFromLine(originalText: string, tag: string, caretPosition: number): string {
+  deleteTagFromLine(originalText: string, tagName: string, caretPosition: number): string {
     const lineText = this.getLineText(caretPosition, originalText);
     const lineStart = this.getLineStartPosition(caretPosition, originalText);
-    const tagInLine = this.findTagInLine(lineText, tag);
+    const tagInLine = this.findTagInLine(lineText, tagName);
 
     if (tagInLine !== undefined ) {
       const tagStartPosition = lineStart + lineText.indexOf(tagInLine);
@@ -60,12 +60,31 @@ export class TextAreaParseService {
     }
   }
 
-  toogleTag(toDoText: string, tag: TagTypeEnum, caretPosition: number, el: HTMLTextAreaElement, details) {
-    const originalText = el.value;
-    if (this.findTagInLine(toDoText, tag.toString()) !== undefined) {
-      el.value = this.deleteTagFromLine(originalText, tag.toString(), caretPosition);
+  toogleTag(tagType: TagTypeEnum, tagTime: string, caretPosition: number, textAreaHtmlElement: HTMLTextAreaElement) {
+    const originalText = textAreaHtmlElement.value;
+    const toDoText = this.getLineText(caretPosition, originalText);
+    if (this.findTagInLine(toDoText, tagType.toString()) !== undefined) {
+      textAreaHtmlElement.value = this.deleteTagFromLine(originalText, tagType.toString(), caretPosition);
     } else {
-      el.value = this.addTagToLine(originalText, tag.toString(), details, caretPosition);
+      textAreaHtmlElement.value = this.addTagToLine(originalText, tagType.toString(), tagTime, caretPosition);
+    }
+  }
+
+  addTabulation(caretPosition: number, textAreaHtmlElement: HTMLTextAreaElement) {
+    const lineStart = this.getLineStartPosition(caretPosition, textAreaHtmlElement.value);
+    const prevText = textAreaHtmlElement.value.substring(0, lineStart);
+    const nextText = textAreaHtmlElement.value.substring(lineStart);
+    textAreaHtmlElement.value = `${prevText}${this.tabulation}${nextText}`;
+  }
+
+  removeTabulation(caretPosition: number, textAreaHtmlElement: HTMLTextAreaElement) {
+    const lineText = this.getLineText(caretPosition, textAreaHtmlElement.value);
+    const lineStart = this.getLineStartPosition(caretPosition, textAreaHtmlElement.value);
+    const prevText = textAreaHtmlElement.value.substring(0, lineStart);
+    const nextText = textAreaHtmlElement.value.substring(lineStart + this.tabulation.length);
+    console.log ();
+    if (lineText.search(/\S/) >= this.tabulation.length) {
+      textAreaHtmlElement.value = `${prevText}${nextText}`;
     }
   }
 

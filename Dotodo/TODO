@@ -29,7 +29,12 @@ Main Roadmap:
   ✔ Arreglar vulnerabilidades @started(18-09-27 19:37) @done(18-09-27 19:38) @lasted(1m13s)
   ✔ Generar la estructura general de la aplicación. @started(18-09-27 19:30) @done(18-09-27 20:36) @lasted(1h6m35s)
   ✔ Definir funcionamiento de la aplicación @started(18-09-27 20:36) @done(18-09-27 20:57) @lasted(21m37s)
-    
+  ✔ El textarea en realidad debe de ser invisible y que los componentes se vayan creando dinamicamente segun se escribe @started(18-09-27 20:58) @done(18-09-27 20:58) @lasted(21s)
+    En realidad no será invisible el textarea si no que el texto será del mismo color que el fondo y los componentes se crearán encima de este, pero el ratón no les afectará.
+    Cuando comienzas a escribir, el texto siempre es una anotación, es decir, será gris, no tendrá estado pero se le podran poner etiquetas con @today 
+    Si detecta una arroba se crea un @hohoh 
+
+  
   Voy a tener que bindear todos los atajos de teclado:
     ✔ [Tab] Incrementar Indentation. @done(18-09-28 18:23)
     ✔ [Shift + Tab ] Reducir Indentation. @done(18-09-28 18:23)
@@ -37,26 +42,14 @@ Main Roadmap:
     ✔ [Alt + s] Comenzar ToDo. @done(18-09-28 18:23)
     ✔ [Alt + c] Cancelar ToDo. @done(18-09-28 18:23)
 
-  ✔ El textarea en realidad debe de ser invisible y que los componentes se vayan creando dinamicamente segun se escribe @started(18-09-27 20:58) @done(18-09-27 20:58) @lasted(21s)
-    En realidad no será invisible el textarea si no que el texto será del mismo color que el fondo y los componentes se crearán encima de este, pero el ratón no les afectará.
-    Cuando comienzas a escribir, el texto siempre es una anotación, es decir, será gris, no tendrá estado pero se le podran poner etiquetas con @today 
-    Si detecta una arroba se crea un @hohoh 
-    
-  Shortcuts:
-      [Tab] Incrementar Indentation.
-      [Shift + Tab ] Reducir Indentation.
-      [Alt + d] Terminar Todo.
-      [Alt + s] Comenzar Todo.
-      [Alt + c] Cancelar Todo.
-  
   Definir modelo TODOS: 
-    - Definir TodosStateModel:
-      Elements: Element[]
-      Todos: Todo[]
-      - Model: Editor Text
-      - UpdateText
+      Definir TodosStateModel:
+        Elements: Element[]
+        Todos: Todo[]
+        Model: Editor Text
+        UpdateText
 
-      - TodoItemStateModel:
+      TodoItemStateModel:
         Name: String
         Indentation: Number
         Type: TodoItemTypeEnum
@@ -74,15 +67,6 @@ Main Roadmap:
 
   ✔ Mandar un UpdateText al comenzar por si hay texto en el text-box @done(18-10-02 18:20)
   
-  ☐ Investigar el doble espacio de white-space: pre-wrap
-    Cuando le meto a las ToDos la regla white-space: pre-wrap
-    para que respete los espacios en blanco que se dejen en el editor
-    me mete un espacio extra que have que se descuadre del textarea, y es un por culo.
-
-  ☐ Arreglar el scroll
-    Ahora mismo no tiene scroll la pagina por lo que si pegas un texto mas grande que la altura de la pantalla se va todo a la puta
-    Habrá que implementar una directiva para que el textarea haga autogrow, y no limitar la altura del body a 100mh
-    Tambien habrá que poner la statusbar en position fixed y arriba del todo de la pantalla a ser posible.
   ✔ RegExp para los tipos de tareas @done(18-09-28 12:45)
   
   ✔ Añadir tipo a los ToDos @started(18-09-28 13:35) @done(18-09-28 17:48) @lasted(4h13m38s)
@@ -92,22 +76,51 @@ Main Roadmap:
 Text-Editor-Component:
   ✔ Extraer toda la logica del tratamiento de tags a un servicio @done(18-10-02 18:19)
   ✔ Extraer toda la logica de la validación en un servicio @done(18-10-02 16:43)
-  ☐ Extrer Date extension method a cualquier lado donde vaya que aun no se cual es
+  ✔ Extrer Date extension method a cualquier lado donde vaya que aun no se cual es @done(18-10-03 14:36)
+  ☐ When Key enter is pressed and a new todo item is generated, it had to be at the same indentation level that his closed up sibiling
+  Añadir tags mediante shortcuts:
+    ✔ Detectar si el tag ya existe en dicha linea y devolver su posición en dicha linea. @done(18-10-01 15:25)
+    ✔ Borrar tag si ya existe @done(18-10-02 12:06)
+    ✔ Crear tag con la hora actual si no existe @done(18-10-02 12:06)
+    ✔ Solo las tareas se pueden comenzar, terminar o cancelar. @done(18-10-02 13:06)
+      ✔ Comprobar si una linea en el shortcut es una tarea. @started(18-10-02 13:00) @done(18-10-02 13:00) @lasted(12s)
   
-Añadir tags mediante shortcuts:
-  ✔ Detectar si el tag ya existe en dicha linea y devolver su posición en dicha linea. @done(18-10-01 15:25)
-  ✔ Borrar tag si ya existe @done(18-10-02 12:06)
-  ✔ Crear tag con la hora actual si no existe @done(18-10-02 12:06)
-  ✔ Solo las tareas se pueden comenzar, terminar o cancelar. @done(18-10-02 13:06)
-    ✔ Comprobar si una linea en el shortcut es una tarea. @started(18-10-02 13:00) @done(18-10-02 13:00) @lasted(12s)
-Validacion de shortcuts:
-  ✔ Una tarea done no puede ser cancelada. @done(18-10-02 16:55)
-  ✔ Una tarea finished o cancelada no puede ser empezada. @done(18-10-02 16:55)
-  ✔ El tag started no puede ser eliminado de tareas completadas. @done(18-10-02 16:56)
-Shortcuts Side Effects:
-  ☐ Cuando una tarea se termina o cancela y estaba comenzada en los detalles se añade el timespan transcurrido desde que empezó hasta que terminó. La etiqueta started se cambia por lasted en caso de done o wasted en caso de canceled
+  Validacion de shortcuts:
+    ✔ Una tarea done no puede ser cancelada. @done(18-10-02 16:55)
+    ✔ Una tarea finished o cancelada no puede ser empezada. @done(18-10-02 16:55)
+    ✔ El tag started no puede ser eliminado de tareas completadas. @done(18-10-02 16:56)
+  Shortcuts Side Effects:
+    ✔ Cuando una tarea se termina o cancela y estaba comenzada en los detalles se añade el timespan transcurrido desde que empezó hasta que terminó. La etiqueta started se cambia por lasted en caso de done o wasted en caso de canceled @done(18-10-03 14:11)
+    ☐ Refactor Side Effects
+  
+Todo-Item-Component:
+  ☐ When the item is a ToDo, replace the first - with a checkbox.
+    ☐ When is done fill the checkbox. 
+    ☐ When is cancelled replace the checkbox with an X
+    Make an absolute placement to avoid move the text wich have to fit with the 
+    underlaying textarea.
+
+  ☐ When the item has Tags, try to add them inside a spam to control its style.
+    Try to not put padding or margin or something that can move the text witch
+    have to fit with the underlaying textarea.
+
+  ☐ When it is a group find the next tasks until the next group and draw a status like (1/5) and the time elapsed
+    ☐ Make the indicator not interactive only informative.
+
+Status-Bar-Component:
+
+
 
 Bugs:
   ✔ No deberia enviar el evento textupdate al estado mientras tenemos alt presionado @done(18-10-02 09:13)
   ✔ Ctr+C jumps as shortcut and is not one @done(18-10-02 18:04)
   ✔ Me está cogiendo atajos de teclado simplemente por escribir sin necesidad de alt. @done(18-10-02 18:04)
+  ☐ Investigar el doble espacio de white-space: pre-wrap @started(18-10-03 14:44)
+    Cuando le meto a las ToDos la regla white-space: pre-wrap
+    para que respete los espacios en blanco que se dejen en el editor
+    me mete un espacio extra que have que se descuadre del textarea, y es un por culo.
+
+  ☐ Arreglar el scroll
+    Ahora mismo no tiene scroll la pagina por lo que si pegas un texto mas grande que la altura de la pantalla se va todo a la puta
+    Habrá que implementar una directiva para que el textarea haga autogrow, y no limitar la altura del body a 100mh
+    Tambien habrá que poner la statusbar en position fixed y arriba del todo de la pantalla a ser posible.

@@ -26,7 +26,7 @@ export class TodosState  {
         const itemsMaped = items.map(item => {
             return {
                 text: item,
-                type: this.parseType(item, regexes)
+                type: this.parseType(item, regexes),
             } as TodoItem;
         });
 
