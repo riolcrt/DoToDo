@@ -39,6 +39,12 @@ export class TextEditorComponent implements OnInit {
     this.dispatchUpdate(this.textAreaElement.value);
   }
 
+  replaceToDoCharacters () {
+    this.textAreaElement.value = this.textAreaElement.value.replace(/(^- )/gm, '☐ ');
+    this.textAreaElement.value = this.textAreaElement.value.replace(/(✔ |✘ )/gm, '☐ ');
+    this.textAreaElement.value = this.textAreaElement.value.replace(/(☐ |✘ )(?=.+@done)/gm, '✔ ');
+    this.textAreaElement.value = this.textAreaElement.value.replace(/(☐ |✔ )(?=.+@cancelled)/gm, '✘ ');
+  }
   onShortcut(event: KeyboardEvent ) {
     this.caretPosition = this.textAreaElement.selectionStart;
 
@@ -49,7 +55,7 @@ export class TextEditorComponent implements OnInit {
     }
   }
 
-  onAltKey(pressedAlso) {
+  onAltKey(pressedAlso: string) {
     const lineStartPosition = this.textAreaService.getLineStartPosition(this.caretPosition, this.textAreaElement.value);
     if (TODOITEM_SHORTCUTS.some( x => x.key === pressedAlso ))  {
       event.preventDefault();
@@ -77,7 +83,8 @@ export class TextEditorComponent implements OnInit {
   }
 
   dispatchUpdate(payload: string) {
-    this.state.dispatch(new UpdateText(payload));
+    this.replaceToDoCharacters();
+    this.state.dispatch(new UpdateText(this.textAreaElement.value));
   }
 
 
@@ -150,7 +157,7 @@ export class TextEditorComponent implements OnInit {
     const startDate = this.textAreaService.extractDateFromTag(tagStartedMatch, 'started');
     const timeElapsed = tagDate.getTime() - startDate.getTime();
     const timeElapsedString = this.dateService.timeEllapsedToString(timeElapsed);
-    this.textAreaService.toogleTag(TagTypeEnum.Lasted, timeElapsedString, this.caretPosition, this.textAreaElement);
+    this.addTag(TagTypeEnum.Lasted, timeElapsedString);
   }
 
   toogleTag(tagType: TagTypeEnum, timeString: string) {
